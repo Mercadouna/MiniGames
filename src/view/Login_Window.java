@@ -5,6 +5,10 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import controlador.LoginControlador;
+import model.Player;
+
 import javax.swing.JTextField;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
@@ -20,9 +24,10 @@ public class Login_Window extends JFrame implements ActionListener {
 
 	private JPanel contentPane;
 	private JTextField textUsername;
-	private JPasswordField passwordpasswrd;
+	private JPasswordField pwfpasswrd;
 	JButton btnLogIn = new JButton("Log In");
 	JButton btnSingUp = new JButton("Sign up");
+	private LoginControlador cont;
 	/**
 	 * Launch the application.
 	 */
@@ -42,7 +47,8 @@ public class Login_Window extends JFrame implements ActionListener {
 	/**
 	 * Create the frame.
 	 */
-	public Login_Window() {
+	public Login_Window(LoginControlador controlador) {
+		this.cont=controlador;
 		setTitle("Login_Minigames");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
@@ -53,7 +59,7 @@ public class Login_Window extends JFrame implements ActionListener {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		textUsername = new JTextField();
+		
 		textUsername.setBounds(184, 62, 194, 20);
 		contentPane.add(textUsername);
 		textUsername.setColumns(10);
@@ -70,9 +76,9 @@ public class Login_Window extends JFrame implements ActionListener {
 		lblNewLabel_1.setBounds(40, 148, 151, 14);
 		contentPane.add(lblNewLabel_1);
 		
-		passwordpasswrd = new JPasswordField();
-		passwordpasswrd.setBounds(184, 145, 194, 20);
-		contentPane.add(passwordpasswrd);
+		pwfpasswrd = new JPasswordField();
+		pwfpasswrd.setBounds(184, 145, 194, 20);
+		contentPane.add(pwfpasswrd);
 		
 		
 		btnLogIn.setBackground(new Color(255, 255, 0));
@@ -94,7 +100,12 @@ public class Login_Window extends JFrame implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
-		
+		if(e.getSource()==btnLogIn) {
+			if (!cont.comprobarPlayer(new Player(textUsername.getText(),new String(pwfpasswrd.getPassword()),0))){
+				Menu_Window mw= new Menu_Window(this.cont);
+				this.dispose();
+			}
+		}
 	}
 	
 }

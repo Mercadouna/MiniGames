@@ -5,32 +5,22 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import controlador.LoginControlador;
+
 import javax.swing.JButton;
 
 public class Menu_Window extends JFrame {
 
 	private JPanel contentPane;
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					Menu_Window frame = new Menu_Window();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+	private LoginControlador cont;
 
 	/**
 	 * Create the frame.
+	 * @param cont 
 	 */
-	public Menu_Window() {
+	public Menu_Window(LoginControlador controlador) {
+		this.cont =controlador;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 843, 521);
 		contentPane = new JPanel();
