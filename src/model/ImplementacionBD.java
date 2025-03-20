@@ -1,11 +1,18 @@
 package model;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.TreeMap;
 
 public class ImplementacionBD implements PlayerDAO{
 			// Atributos
+		private Connection con;
+		private PreparedStatement stmt;
 			//private Connection con;
 			//private PreparedStatement stmt;
 
@@ -16,7 +23,7 @@ public class ImplementacionBD implements PlayerDAO{
 			private String urlBD;
 			private String userBD;
 			private String passwordBD;
-			final String SQL = "SELECT * FROM usuario WHERE nombre = ? AND contraseña = ?";
+			final String SQL = "SELECT US_NOM, PASS FROM usuario WHERE US_NOM = ? AND PASS = ?";
 			final String sql = "SELECT * FROM usuario WHERE usuario = ? AND contraseña = ?";
 			final String sqlInsert = "INSERT INTO usuario VALUES ( ?,?)";
 			final String sqlConsulta = "SELECT * FROM usuario";
@@ -31,9 +38,68 @@ public class ImplementacionBD implements PlayerDAO{
 				this.userBD = this.configFile.getString("DBUser");
 				this.passwordBD = this.configFile.getString("DBPass");
 			}
+
+	
+
+	@Override
+	public boolean comprobarplayer(Player player) {
+		boolean existe=false;
+		this.openConnection();
+		
+		try {
+			stmt = con.prepareStatement(sql);
+			 stmt.setString(1, player.getNombre());
+	         stmt.setString(2, player.getPassword());
+	         ResultSet resultado = stmt.executeQuery();
+	         
+	         
+	         if (resultado.next()) {
+	                existe = true;
+	            }
+	         
+	         resultado.close();
+	            stmt.close();
+	            con.close();
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+
+		return existe;
+	}
+
+
+	@Override
+	public boolean eliminarplayer(Player player) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+
+	@Override
+	public boolean modificarpuntos(Player player) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+
+	@Override
+	public boolean eliminarhist(Player player) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+
+	@Override
+	public boolean visualizarhist(Player player) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 	
 	
-	/*private void openConnection() {
+	private void openConnection() {
 		try {
 			con = DriverManager.getConnection(urlBD, this.userBD, this.passwordBD);
 		} catch (SQLException e) {
@@ -42,7 +108,7 @@ public class ImplementacionBD implements PlayerDAO{
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	}*/
+	}
 	
 	/*public boolean comprobarUsuario(Usuario usuario){
 		// Abrimos la conexion
