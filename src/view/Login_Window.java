@@ -21,8 +21,8 @@ public class Login_Window extends JFrame implements ActionListener {
 	private JPanel contentPane;
 	private JTextField textUsername;
 	private JPasswordField passwordpasswrd;
-	JButton btnNewButton = new JButton("Log In");
-	JButton btnNewButton_1 = new JButton("Sign up");
+	JButton btnLogIn = new JButton("Log In");
+	JButton btnSingUp = new JButton("Sign up");
 	/**
 	 * Launch the application.
 	 */
@@ -75,18 +75,20 @@ public class Login_Window extends JFrame implements ActionListener {
 		contentPane.add(passwordpasswrd);
 		
 		
-		btnNewButton.setBackground(new Color(255, 255, 0));
-		btnNewButton.setForeground(new Color(255, 168, 81));
-		btnNewButton.setFont(new Font("Snap ITC", Font.BOLD, 17));
-		btnNewButton.setBounds(55, 213, 117, 23);
-		contentPane.add(btnNewButton);
+		btnLogIn.setBackground(new Color(255, 255, 0));
+		btnLogIn.setForeground(new Color(255, 168, 81));
+		btnLogIn.setFont(new Font("Snap ITC", Font.BOLD, 17));
+		btnLogIn.setBounds(55, 213, 117, 23);
+		contentPane.add(btnLogIn);
 		
 		
-		btnNewButton_1.setBackground(new Color(255, 255, 0));
-		btnNewButton_1.setForeground(new Color(255, 168, 81));
-		btnNewButton_1.setFont(new Font("Snap ITC", Font.BOLD, 17));
-		btnNewButton_1.setBounds(259, 213, 119, 23);
-		contentPane.add(btnNewButton_1);
+		btnSingUp.setBackground(new Color(255, 255, 0));
+		btnSingUp.setForeground(new Color(255, 168, 81));
+		btnSingUp.setFont(new Font("Snap ITC", Font.BOLD, 17));
+		btnSingUp.setBounds(259, 213, 119, 23);
+		contentPane.add(btnSingUp);
+		btnLogIn.addActionListener(this);
+		btnSingUp.addActionListener(this);
 	}
 
 	@Override
