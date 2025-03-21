@@ -23,11 +23,11 @@ import java.awt.Color;
 public class Login_Window extends JFrame implements ActionListener {
 
 	private JPanel contentPane;
-	private JTextField textUsername;
 	private JPasswordField pwfpasswrd;
 	JButton btnLogIn = new JButton("Log In");
 	JButton btnSingUp = new JButton("Sign up");
 	private LoginControlador cont;
+	private JTextField textUserName;
 	/**
 	 * Create the frame.
 	 */
@@ -44,19 +44,15 @@ public class Login_Window extends JFrame implements ActionListener {
 		contentPane.setLayout(null);
 		
 		
-		textUsername.setBounds(184, 62, 194, 20);
-		contentPane.add(textUsername);
-		textUsername.setColumns(10);
-		
 		JLabel lblNewLabel = new JLabel("Username :");
-		lblNewLabel.setForeground(new Color(255, 255, 0));
-		lblNewLabel.setFont(new Font("Snap ITC", Font.BOLD, 17));
+		lblNewLabel.setForeground(new Color(0, 0, 0));
+		lblNewLabel.setFont(new Font("Tempus Sans ITC", Font.BOLD, 17));
 		lblNewLabel.setBounds(40, 65, 151, 14);
 		contentPane.add(lblNewLabel);
 		
 		JLabel lblNewLabel_1 = new JLabel("Password :");
-		lblNewLabel_1.setForeground(new Color(255, 255, 0));
-		lblNewLabel_1.setFont(new Font("Snap ITC", Font.BOLD, 17));
+		lblNewLabel_1.setForeground(new Color(0, 0, 0));
+		lblNewLabel_1.setFont(new Font("Tempus Sans ITC", Font.BOLD, 17));
 		lblNewLabel_1.setBounds(40, 148, 151, 14);
 		contentPane.add(lblNewLabel_1);
 		
@@ -65,37 +61,40 @@ public class Login_Window extends JFrame implements ActionListener {
 		contentPane.add(pwfpasswrd);
 		
 		
-		btnLogIn.setBackground(new Color(255, 255, 0));
+		btnLogIn.setBackground(new Color(0, 0, 0));
 		btnLogIn.setForeground(new Color(255, 168, 81));
-		btnLogIn.setFont(new Font("Snap ITC", Font.BOLD, 17));
+		btnLogIn.setFont(new Font("Tempus Sans ITC", Font.BOLD, 17));
 		btnLogIn.setBounds(55, 213, 117, 23);
 		contentPane.add(btnLogIn);
 		
 		
-		btnSingUp.setBackground(new Color(255, 255, 0));
+		btnSingUp.setBackground(new Color(0, 0, 0));
 		btnSingUp.setForeground(new Color(255, 168, 81));
-		btnSingUp.setFont(new Font("Snap ITC", Font.BOLD, 17));
+		btnSingUp.setFont(new Font("Tempus Sans ITC", Font.BOLD, 17));
 		btnSingUp.setBounds(259, 213, 119, 23);
 		contentPane.add(btnSingUp);
+		
+		textUserName = new JTextField();
+		textUserName.setBounds(184, 65, 194, 20);
+		contentPane.add(textUserName);
+		textUserName.setColumns(10);
 		btnLogIn.addActionListener(this);
 		btnSingUp.addActionListener(this);
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
 		if(e.getSource()==btnLogIn) {
-			if (cont.comprobarPlayer(new Player(textUsername.getText(),new String(pwfpasswrd.getPassword()),0))){
+			if (cont.compareplayer(new Player(textUserName.getText(),new String(pwfpasswrd.getPassword()),0))){
 				Menu_Window mw= new Menu_Window(this.cont);
 				this.dispose();
 			}
 		}
 		if(e.getSource()==btnSingUp) {
-			if(!cont.comprobarPlayer(new Player(textUsername.getText(),new String(pwfpasswrd.getPassword()),0))) {
+			if(!cont.compareplayer(new Player(textUserName.getText(),new String(pwfpasswrd.getPassword()),0))) {
 				Menu_Window mw= new Menu_Window(this.cont);
 				this.dispose();
 			}
 		}
 	}
-	
 }

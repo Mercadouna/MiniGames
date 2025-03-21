@@ -1,26 +1,26 @@
 package model;
 
 public class Player {
-	private String nombre;
+	private String Name;
 	private String password;
 	private int points;
 
 
 	public Player() {
-		this.nombre="";
+		this.Name="";
 		this.password="";
 		this.points=0;
 	}
 	public Player(String nom, String pass, int point) {
-		this.nombre=nom;
+		this.Name=nom;
 		this.password=pass;
 		this.points=point;
 	}
-	public String getNombre() {
-		return nombre;
+	public String getName() {
+		return Name;
 	}
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
+	public void setName(String Name) {
+		this.Name = Name;
 	}
 	public String getPassword() {
 		return password;
@@ -36,6 +36,6 @@ public class Player {
 	}
 	@Override
 	public String toString() {
-		return "Player [nombre=" + nombre + ", password=" + password + ", points= " + points + "]";
+		return "Player [Name=" + Name + ", password=" + password + ", points= " + points + "]";
 	}
 }
