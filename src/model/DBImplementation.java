@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.TreeMap;
 
-public class ImplementationBD implements PlayerDAO{
+public class DBImplementation implements PlayerDAO{
 	// Atributos
 	private Connection con;
 	private PreparedStatement stmt;
@@ -32,7 +32,7 @@ public class ImplementationBD implements PlayerDAO{
 	final String SQLMODIFICAR = "UPDATE usuario SET contraseña=? WHERE nombre=?";
 
 
-	public ImplementationBD() {
+	public DBImplementation() {
 		this.configFile = ResourceBundle.getBundle("modelo.configClase");
 		this.driverBD = this.configFile.getString("Driver");
 		this.urlBD = this.configFile.getString("Conn");
