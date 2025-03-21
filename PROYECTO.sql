@@ -88,12 +88,12 @@ call MostrarUser(); */
 
 -- Creation of a procedure for inserting a player to the database.
 Delimiter //
-create procedure InsertPlayer(us_name varchar(20), us_password varchar(20))
+create procedure InsertPlayer(us_name varchar(50), us_password varchar(50))
 begin 
 declare Id_user int;
 if not exists(select * from Player where US_NAME=us_name and PASS=us_password) then 
 select max(Us_Id) + 1 into Id_user from Player;
-insert into Player values(Id_user, us_name, us_password);
+insert into Player values(Id_user, us_name, 0, us_password);
 select "Se ha creado correctamente";
 else 
 select "Ya existe";
@@ -101,7 +101,7 @@ end if;
 end //
 Delimiter ;
 -- to call the procedure
--- call InsertPlayer('xabi', 49, 'G2006');
+call InsertPlayer('pep', '35264');
 
 -- Creation of a procedure to remove a player from the database by the id.
 Delimiter //
@@ -232,25 +232,16 @@ Delimiter ;*/
 -- select CheckPlayer('Mikel','321');
 
 
--- 	creation of a procedure to update a player's points after playing a game
-Delimiter //
-create Procedure ModifyUserPointsGame(name_us varchar(50), name_game varchar(50), win_poitns int )
+
+/*Delimiter //
+create Procedure ModifyUserPointsGame(name_us varchar(50), win_poitns int)
 begin
-declare current_poitns int;
-declare id_user int;
-if  exists (select * from Player where US_NAME=name_us) && exists ( select * from GAME where G_NAME=name_game) then
-	select POINTS into current_poitns from PLAYER where US_NAME=name_us;
-    select Us_Id into id_user from PLAYER where US_NAME=name_us;
-    update PLAYER set POINTS=current_poitns+win_poitns where US_NAME=name_us;
-    insert into PlAYS values (id_user, name_game, CURDATE(), win_poitns);
-    select 'Have been modificated correctly';
-else 
-select 'Player or game does not exist in the database';
-end if ;
+declare new_points int;
+if not exists (select * from 
+
 end //
-Delimiter ;
--- to call the procedure
--- call ModifyUserPointsGame('Mikel','ARITMETICS', 30);
+Delimiter ;*/
 -- drop database MINIGAMES;
--- drop procedure    ModifyUserPointsGame     ;
+-- drop procedure         ;
 -- drop function        ;
+
