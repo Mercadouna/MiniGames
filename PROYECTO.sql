@@ -1,6 +1,10 @@
+-- Creation of the database.
 CREATE DATABASE MINIGAMES;
+
+-- For select the database.
 USE MINIGAMES;
 
+-- Creation of the tables.
 CREATE TABLE PLAYER(
 Us_Id int auto_increment not null primary key,
 US_NAME VARCHAR(50),
@@ -35,7 +39,7 @@ FOREIGN KEY (G_NAME) REFERENCES GAME (G_NAME)on update cascade,
 PRIMARY KEY (Us_Id, G_NAME)
 );
 
-
+-- 	Insertion of data into database tables.
 INSERT INTO PLAYER (US_NAME, POINTS, PASS)VALUES ('Alain', 100, '123'),
 ('Mikel', 0, '321'),
 ('Ekain', 60, '213');
@@ -59,7 +63,7 @@ INSERT INTO BUY VALUES(1, 'DEFINITIVE TROPHY'),
 INSERT INTO PLAYS VALUES (2, 'AIM', '2024-12-12', 20),
 (3, 'AIM', '2025-01-05', 30);
 
-
+-- Creation of different procedures and functions.
 /*Delimiter //
 create procedure MostrarUser()
 begin
@@ -79,11 +83,12 @@ end while;
 close c;
 end //
 Delimiter ;
-
+-- to call the procedure
 call MostrarUser(); */
 
+-- Creation of a procedure for inserting a player to the database.
 Delimiter //
-create procedure InsertUsuario(us_name varchar(20),  points int, us_password varchar(20))
+create procedure InsertPlayer(us_name varchar(20),  points int, us_password varchar(20))
 begin 
 declare Id_user int;
 if not exists(select * from Player where US_NAME=us_name and PASS=us_password) then 
@@ -95,11 +100,12 @@ select "Ya existe";
 end if;
 end //
 Delimiter ;
+-- to call the procedure
+-- call InsertPlayer('xabi', 49, 'G2006');
 
-call InsertUsuario('xabi', 49, 'G2006');
-
+-- Creation of a procedure to remove a player from the database by the id.
 Delimiter //
-create procedure DeleteUser(id int)
+create procedure DeletePlayer(id int)
 Begin
 if exists (select * from PLayer where Us_Id=id) then 
 delete from PLayer where Us_Id=id;
@@ -109,11 +115,11 @@ select "No existe el Pedido";
 end if;
 end //
 DELIMITER ;
+-- to call the procedure
+-- call DeletePlayer(4);
 
-call DeleteUser(4);
 
-
-
+-- Creation of a procedure to modify the price of a trophy in the database given its name.
 Delimiter // 
 create procedure ModifyPrize(nameP varchar(30), Price int)
 begin 
@@ -127,11 +133,12 @@ select "Doesn't exist that Prize";
 end if;
 end //
 Delimiter ;
-call ModifyPrize('EPIC TROPHYE', 900);
+-- to call the procedure
+-- call ModifyPrize('EPIC TROPHYE', 900);
 
-
+-- Creation of a function to obtain the score of a player in a game given the name of the player and the game.
 Delimiter //
-create Function UserScoreGame(nom_us varchar(50), nom_ga varchar(50))
+create Function PlayerScoreGame(nom_us varchar(50), nom_ga varchar(50))
 returns varchar(50) deterministic
 begin 
 declare pointsbygame int;
@@ -141,9 +148,10 @@ select SCORE into pointsbygame from PLAYS p join PLAYER pa on p.Us_Id=pa.Us_Id w
  return return_text;
  end //
 Delimiter ;
+-- to select the function 
+-- select PlayerScoreGame('Mikel', 'AIM');
 
-select UserScoreGame('Mikel', 'AIM');
-
+-- Creation of a function to obtain the id of a player given his name and password.
 Delimiter //
 Create Function ReturnID( nom_us varchar(50), password_us varchar(50))
 returns varchar(50) deterministic
@@ -155,12 +163,12 @@ select concat('The player ',nom_us , ' have this id: ',id_us) into return_text;
 return return_text;
 end //
 Delimiter ;
+-- to select the function 
+-- select ReturnID('Mikel', '321');
 
-select ReturnID('Mikel', '321');
-
-
+-- Creation of a function to obtain the number of registered players in the database.
 Delimiter //
-create function UserQuantity()
+create function PlayerQuantity()
 returns varchar(50) deterministic
 begin
 declare Quantity int;
@@ -170,12 +178,12 @@ select concat('This is the number of registered users ',Quantity) into return_te
 return return_text;
 end //
 Delimiter ;
+-- to select the function 
+-- select PlayerQuantity();
 
-select UserQuantity();
-
-
+-- Creation of a function to obtain the data of a player given his id.
 Delimiter //
-create Function showUser(id_us int)
+create Function showPlayer(id_us int)
 returns varchar(50) deterministic
 begin
 declare name_us, paswword_us, return_text varchar(50);
@@ -187,12 +195,12 @@ select concat('ID: ',id_us,' Name: ',name_us,' Password: ',paswword_us,' Points:
 return return_text;
 end //
 Delimiter ;
+-- to select the function 
+-- select showPlayer(2);
 
-select showUser(2);
-
-
+-- Creation of a function to check if a player is registered or not in the database.
 Delimiter //
-create function CheckUser(nom_us varchar(50), password_us varchar(50))
+create function CheckPlayer(nom_us varchar(50), password_us varchar(50))
 returns boolean deterministic
 begin
 declare exist boolean default 0;
@@ -220,8 +228,21 @@ return exist;
 end if;
 end //
 Delimiter ;*/
+-- to select the function 
+-- select CheckPlayer('Mikel','321');
 
-select CheckUser('Mikel','321');
+
+
+/*Delimiter //
+create Procedure ModifyUserPointsGame(name_us varchar(50), win_poitns int)
+begin
+declare new_points int;
+if not exists (select * from 
+
+end //
+Delimiter ;*/
+
 -- drop database MINIGAMES;
 -- drop procedure         ;
 -- drop function        ;
+
