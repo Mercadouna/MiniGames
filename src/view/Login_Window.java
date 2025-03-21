@@ -31,8 +31,8 @@ public class Login_Window extends JFrame implements ActionListener {
 	/**
 	 * Create the frame.
 	 */
-	public Login_Window(LoginControlador controlador) {
-		this.cont=controlador;
+	public Login_Window(LoginControlador controler) {
+		this.cont=controler;
 		setTitle("Login_Minigames");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
