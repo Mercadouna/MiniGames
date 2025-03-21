@@ -23,7 +23,7 @@ public class ImplementationBD implements PlayerDAO{
 	private String urlBD;
 	private String userBD;
 	private String passwordBD;
-	final String SQL = "SELECT US_NOM, PASS FROM usuario WHERE US_NAME = ? AND PASS = ?";
+	final String SQL = "SELECT US_NAME, PASS FROM PLAYER WHERE US_NAME = ? AND PASS = ?";
 	final String eliminarpr = "call DeleteUser(?)" ;
 	final String TakeID = "SELECT id from PLAYER WHERE US_NAME =  ?";
 	final String sqlInsert = "INSERT INTO usuario VALUES ( ?,?)";
@@ -33,7 +33,7 @@ public class ImplementationBD implements PlayerDAO{
 
 
 	public ImplementationBD() {
-		this.configFile = ResourceBundle.getBundle("modelo.configClase");
+		this.configFile = ResourceBundle.getBundle("configClase");
 		this.driverBD = this.configFile.getString("Driver");
 		this.urlBD = this.configFile.getString("Conn");
 		this.userBD = this.configFile.getString("DBUser");

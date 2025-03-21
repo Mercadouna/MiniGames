@@ -28,6 +28,7 @@ public class Login_Window extends JFrame implements ActionListener {
 	JButton btnLogIn = new JButton("Log In");
 	JButton btnSingUp = new JButton("Sign up");
 	private LoginControlador cont;
+	private JTextField textField;
 	/**
 	 * Create the frame.
 	 */
@@ -43,10 +44,6 @@ public class Login_Window extends JFrame implements ActionListener {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		
-		textUsername.setBounds(184, 62, 194, 20);
-		contentPane.add(textUsername);
-		textUsername.setColumns(10);
 		
 		JLabel lblNewLabel = new JLabel("Username :");
 		lblNewLabel.setForeground(new Color(255, 255, 0));
@@ -77,6 +74,11 @@ public class Login_Window extends JFrame implements ActionListener {
 		btnSingUp.setFont(new Font("Snap ITC", Font.BOLD, 17));
 		btnSingUp.setBounds(259, 213, 119, 23);
 		contentPane.add(btnSingUp);
+		
+		textField = new JTextField();
+		textField.setBounds(184, 65, 194, 20);
+		contentPane.add(textField);
+		textField.setColumns(10);
 		btnLogIn.addActionListener(this);
 		btnSingUp.addActionListener(this);
 	}
@@ -85,17 +87,18 @@ public class Login_Window extends JFrame implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		if(e.getSource()==btnLogIn) {
-			if (cont.comprobarPlayer(new Player(textUsername.getText(),new String(pwfpasswrd.getPassword()),0))){
+			if (cont.compareplayer(new Player(textField.getText(),new String(pwfpasswrd.getPassword()),0))){
 				Menu_Window mw= new Menu_Window(this.cont);
+				mw.setVisible(true);
 				this.dispose();
 			}
 		}
 		if(e.getSource()==btnSingUp) {
-			if(!cont.comprobarPlayer(new Player(textUsername.getText(),new String(pwfpasswrd.getPassword()),0))) {
+			if(!cont.compareplayer(new Player(textField.getText(),new String(pwfpasswrd.getPassword()),0))) {
 				Menu_Window mw= new Menu_Window(this.cont);
+				mw.setVisible(true);
 				this.dispose();
 			}
 		}
 	}
-	
 }
