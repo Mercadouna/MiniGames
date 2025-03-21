@@ -29,22 +29,6 @@ public class Login_Window extends JFrame implements ActionListener {
 	JButton btnSingUp = new JButton("Sign up");
 	private LoginControlador cont;
 	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					Login_Window frame = new Login_Window();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-	/**
 	 * Create the frame.
 	 */
 	public Login_Window(LoginControlador controlador) {
@@ -101,7 +85,13 @@ public class Login_Window extends JFrame implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		if(e.getSource()==btnLogIn) {
-			if (!cont.comprobarPlayer(new Player(textUsername.getText(),new String(pwfpasswrd.getPassword()),0))){
+			if (cont.comprobarPlayer(new Player(textUsername.getText(),new String(pwfpasswrd.getPassword()),0))){
+				Menu_Window mw= new Menu_Window(this.cont);
+				this.dispose();
+			}
+		}
+		if(e.getSource()==btnSingUp) {
+			if(!cont.comprobarPlayer(new Player(textUsername.getText(),new String(pwfpasswrd.getPassword()),0))) {
 				Menu_Window mw= new Menu_Window(this.cont);
 				this.dispose();
 			}
