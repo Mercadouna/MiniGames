@@ -56,11 +56,11 @@ INSERT INTO BUY VALUES(1, 'DEFINITIVE TROPHY'),
 (2, 'LEGENDARY TROPHY'),
 (2, 'MITHYC TROPHYE');
 
-INSERT INTO PLAYS VALUES (2, 'AIM', '2024-12-12', default),
-(3, 'AIM', '2025-01-05', default);
+INSERT INTO PLAYS VALUES (2, 'AIM', '2024-12-12', 20),
+(3, 'AIM', '2025-01-05', 30);
 
 
-Delimiter //
+/*Delimiter //
 create procedure MostrarUser()
 begin
 declare id_user int;
@@ -73,14 +73,14 @@ declare continue handler for not found set fin = 1;
 open c;
 fetch c into id_user, nombre, contraseña, points;
 while fin=0 do
-select concat('ID:'+ id_user +' Name: '+ nombre+ ' Password: '+ contraseña +' Points: '+ points)'User data';
+select concat('ID:', id_user ,' Name: ', nombre, ' Password: ', contraseña ,' Points: ', points)'User data';
 fetch c into id_user, nombre, contraseña, points;
 end while;
 close c;
 end //
 Delimiter ;
 
-call MostrarUser(); 
+call MostrarUser(); */
 
 Delimiter //
 create procedure InsertUsuario(us_name varchar(20),  points int, us_password varchar(20))
@@ -130,8 +130,98 @@ Delimiter ;
 call ModifyPrize('EPIC TROPHYE', 900);
 
 
+Delimiter //
+create Function UserScoreGame(nom_us varchar(50), nom_ga varchar(50))
+returns varchar(50) deterministic
+begin 
+declare pointsbygame int;
+declare return_text varchar(50);
+select SCORE into pointsbygame from PLAYS p join PLAYER pa on p.Us_Id=pa.Us_Id where pa.US_NAME=nom_us and p.G_NAME= nom_ga;
+ select concat('This are the points that ', nom_us ,' have done in ', nom_ga , ': ', pointsbygame) into return_text;
+ return return_text;
+ end //
+Delimiter ;
+
+select UserScoreGame('Mikel', 'AIM');
+
+Delimiter //
+Create Function ReturnID( nom_us varchar(50), password_us varchar(50))
+returns varchar(50) deterministic
+begin
+declare id_us int;
+declare return_text varchar(50);
+select Us_Id into id_us from PLAYER where US_NAME=nom_us and PASS=password_us;
+select concat('The player ',nom_us , ' have this id: ',id_us) into return_text;
+return return_text;
+end //
+Delimiter ;
+
+select ReturnID('Mikel', '321');
 
 
+Delimiter //
+create function UserQuantity()
+returns varchar(50) deterministic
+begin
+declare Quantity int;
+declare return_text varchar(50);
+select count(*) into Quantity from PLAYER;
+select concat('This is the number of registered users ',Quantity) into return_text;
+return return_text;
+end //
+Delimiter ;
+
+select UserQuantity();
+
+
+Delimiter //
+create Function showUser(id_us int)
+returns varchar(50) deterministic
+begin
+declare name_us, paswword_us, return_text varchar(50);
+declare points_us int;
+select US_NAME into name_us from player where Us_Id=id_us;
+select PASS into paswword_us from player where Us_Id=id_us;
+select POINTS into points_us from player where Us_Id=id_us;
+select concat('ID: ',id_us,' Name: ',name_us,' Password: ',paswword_us,' Points: ',points_us) into return_text;
+return return_text;
+end //
+Delimiter ;
+
+select showUser(2);
+
+
+Delimiter //
+create function CheckUser(nom_us varchar(50), password_us varchar(50))
+returns boolean deterministic
+begin
+declare exist boolean default 0;
+if exists (select * from PLAYER where US_NAME=nom_us and PASS=password_us) then 
+ set exist= 1;
+ return exist;
+ else 
+set exist=0;
+return exist;
+end if;
+end //
+Delimiter ;
+
+/*Delimiter //
+create function CheckUser2(nom_us varchar(50), password_us varchar(50))
+returns boolean deterministic
+begin
+declare exist boolean default 0;
+if exists (select * from PLAYER where US_NAME=nom_us and PASS=password_us) then 
+ set exist= 1;
+ return exist;
+ else 
+set exist=0;
+return exist;
+end if;
+end //
+Delimiter ;*/
+
+select CheckUser('Mikel','321');
 -- drop database MINIGAMES;
 -- drop procedure         ;
--- drop function          ;
+-- drop function        ;
