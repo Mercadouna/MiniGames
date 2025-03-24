@@ -13,7 +13,9 @@ public class LoginControlador {
 	public void addplayer(Player player) {
 		dao.addplayer(player);
 	}
-	
+	public boolean checkPL(Player player) {
+		return dao.checkPL(player);
+	}
 	
 	
 }

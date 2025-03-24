@@ -8,5 +8,6 @@ public interface PlayerDAO {
 	public boolean eliminarhist(Player player);
 	public boolean visualizarhist(Player player);
 	public void addplayer(Player player);
+	public boolean checkPL(Player player);
 
 }
