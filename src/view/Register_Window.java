@@ -19,6 +19,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import java.awt.Color;
+import javax.swing.SwingConstants;
 
 public class Register_Window extends JFrame implements ActionListener {
 
@@ -27,6 +28,7 @@ public class Register_Window extends JFrame implements ActionListener {
 	JButton btnSingUp = new JButton("Sign up");
 	private LoginControlador cont;
 	private JTextField textField;
+	private JLabel lblMSG;
 	/**
 	 * Create the frame.
 	 */
@@ -44,25 +46,22 @@ public class Register_Window extends JFrame implements ActionListener {
 		
 		
 		JLabel lblNewLabel = new JLabel("Username :");
-		lblNewLabel.setForeground(new Color(255, 255, 0));
-		lblNewLabel.setFont(new Font("Snap ITC", Font.BOLD, 17));
+		lblNewLabel.setForeground(Color.BLACK);
+		lblNewLabel.setFont(new Font("Tempus Sans ITC", Font.BOLD, 17));
 		lblNewLabel.setBounds(40, 65, 151, 14);
 		contentPane.add(lblNewLabel);
 		
 		JLabel lblNewLabel_1 = new JLabel("Password :");
-		lblNewLabel_1.setForeground(new Color(255, 255, 0));
-		lblNewLabel_1.setFont(new Font("Snap ITC", Font.BOLD, 17));
+		lblNewLabel_1.setForeground(Color.BLACK);
+		lblNewLabel_1.setFont(new Font("Tempus Sans ITC", Font.BOLD, 17));
 		lblNewLabel_1.setBounds(40, 148, 151, 14);
 		contentPane.add(lblNewLabel_1);
 		
 		pwfpasswrd = new JPasswordField();
 		pwfpasswrd.setBounds(184, 145, 194, 20);
 		contentPane.add(pwfpasswrd);
-		
-		
-		btnSingUp.setBackground(new Color(255, 255, 0));
-		btnSingUp.setForeground(new Color(255, 168, 81));
-		btnSingUp.setFont(new Font("Snap ITC", Font.BOLD, 17));
+		btnSingUp.setForeground(new Color(255, 128, 0));
+		btnSingUp.setFont(new Font("Tempus Sans ITC", Font.BOLD, 17));
 		btnSingUp.setBounds(259, 213, 119, 23);
 		contentPane.add(btnSingUp);
 		
@@ -70,23 +69,25 @@ public class Register_Window extends JFrame implements ActionListener {
 		textField.setBounds(184, 65, 194, 20);
 		contentPane.add(textField);
 		textField.setColumns(10);
+		
+		lblMSG = new JLabel("");
+		lblMSG.setHorizontalAlignment(SwingConstants.CENTER);
+		lblMSG.setBounds(62, 22, 289, 14);
+		contentPane.add(lblMSG);
 		btnSingUp.addActionListener(this);
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
-		boolean existe;
-		
+		// TODO Auto-generated method stub		
 		if(e.getSource()==btnSingUp) {
-			existe = cont.compareplayer(new Player(textField.getText(),new String(pwfpasswrd.getPassword()),0));
-			if(!existe) {
+			if(!cont.compareplayer(new Player(textField.getText(),new String(pwfpasswrd.getPassword()),0))) {
 				cont.addplayer(new Player(textField.getText(),new String(pwfpasswrd.getPassword()),0));
 				Menu_Window mw= new Menu_Window(this.cont);
 				mw.setVisible(true);
 				this.dispose();
 			}else {
-				
+				lblMSG.setText("This account already exists.");
 			}
 		}
 	}

@@ -92,7 +92,7 @@ public class Login_Window extends JFrame implements ActionListener {
 				mw.setVisible(true);
 				this.dispose();
 			}else {
-				lblMSG.setText("El usuario o la contraseña son incorrectos.");
+				lblMSG.setText("The username or/and the password are wrong.");
 			}
 		}
 		if(e.getSource()==btnSingUp) {
