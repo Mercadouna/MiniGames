@@ -78,16 +78,17 @@ public class Register_Window extends JFrame implements ActionListener {
 		// TODO Auto-generated method stub
 		boolean existe;
 		
-		if(e.getSource()==btnSingUp) {
-			existe = cont.compareplayer(new Player(textField.getText(),new String(pwfpasswrd.getPassword()),0));
-			if(!existe) {
-				cont.addplayer(new Player(textField.getText(),new String(pwfpasswrd.getPassword()),0));
-				Menu_Window mw= new Menu_Window(this.cont);
-				mw.setVisible(true);
-				this.dispose();
-			}else {
-				
-			}
+		 if (e.getSource() == btnSingUp) {
+		        existe = cont.checkPL(new Player(textField.getText(), new String(pwfpasswrd.getPassword()), 0));
+		        if (!existe) {
+		            cont.addplayer(new Player(textField.getText(), new String(pwfpasswrd.getPassword()), 0));
+		            Menu_Window mw = new Menu_Window(this.cont);
+		            mw.setVisible(true);
+		            this.dispose();
+		        } else {
+		            //Añadir que hacer en caso de que el usuario ya existe.
+		        }
+		    }
 		}
 	}
-}
+

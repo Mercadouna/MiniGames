@@ -24,7 +24,7 @@ public  class ImplementationBD implements PlayerDAO{
 	private String userBD;
 	private String passwordBD;
 	final String SQL = "SELECT US_NAME, PASS FROM PLAYER WHERE US_NAME = ? AND PASS = ?";
-	final String comparePL = "call CheckPlayer(?)";
+	final String comparePL = "select CheckPlayer(?)";
 	final String eliminarpr = "call DeleteUser(?)" ;
 	final String addpl = "call InsertPlayer(?, ?)" ;
 	final String TakeID = "SELECT id from PLAYER WHERE US_NAME =  ?";
@@ -139,27 +139,23 @@ public  class ImplementationBD implements PlayerDAO{
 		
 	}
 	
-	public boolean checkPL (Player player) {
-		this.openConnection();
-		boolean exist = false;
-		try {
-			stmt = con.prepareCall(comparePL);
-			stmt.setString(1, player.getName());
-			ResultSet result = stmt.executeQuery();
-			
-			if (result.next()) {
-				exist = true;
-			}
-
-			result.close();
-			stmt.close();
-			con.close();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return exist;
-
+	public boolean checkPL(Player player) {
+	    this.openConnection();
+	    boolean exist = false;
+	    try {
+	        stmt = con.prepareStatement(comparePL); // Llama a la función
+	        stmt.setString(1, player.getName());
+	        ResultSet resultSet = stmt.executeQuery();
+	        if (resultSet.next()) {
+	            exist = resultSet.getBoolean(1); // Obtiene el valor booleano de la función
+	        }
+	        resultSet.close();
+	        stmt.close();
+	        con.close();
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    return exist;
 	}
 
 
