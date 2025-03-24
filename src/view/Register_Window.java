@@ -20,20 +20,19 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import java.awt.Color;
 
-public class Login_Window extends JFrame implements ActionListener {
+public class Register_Window extends JFrame implements ActionListener {
 
 	private JPanel contentPane;
 	private JPasswordField pwfpasswrd;
-	JButton btnLogIn = new JButton("Log In");
 	JButton btnSingUp = new JButton("Sign up");
 	private LoginControlador cont;
 	private JTextField textField;
 	/**
 	 * Create the frame.
 	 */
-	public Login_Window(LoginControlador controler) {
+	public Register_Window(LoginControlador controler) {
 		this.cont=controler;
-		setTitle("Login_Minigames");
+		setTitle("Register_Minigames");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
@@ -61,13 +60,6 @@ public class Login_Window extends JFrame implements ActionListener {
 		contentPane.add(pwfpasswrd);
 		
 		
-		btnLogIn.setBackground(new Color(255, 255, 0));
-		btnLogIn.setForeground(new Color(255, 168, 81));
-		btnLogIn.setFont(new Font("Snap ITC", Font.BOLD, 17));
-		btnLogIn.setBounds(55, 213, 117, 23);
-		contentPane.add(btnLogIn);
-		
-		
 		btnSingUp.setBackground(new Color(255, 255, 0));
 		btnSingUp.setForeground(new Color(255, 168, 81));
 		btnSingUp.setFont(new Font("Snap ITC", Font.BOLD, 17));
@@ -78,25 +70,24 @@ public class Login_Window extends JFrame implements ActionListener {
 		textField.setBounds(184, 65, 194, 20);
 		contentPane.add(textField);
 		textField.setColumns(10);
-		btnLogIn.addActionListener(this);
 		btnSingUp.addActionListener(this);
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
-		if(e.getSource()==btnLogIn) {
-			if (cont.compareplayer(new Player(textField.getText(),new String(pwfpasswrd.getPassword()),0))){
+		boolean existe;
+		
+		if(e.getSource()==btnSingUp) {
+			existe = cont.compareplayer(new Player(textField.getText(),new String(pwfpasswrd.getPassword()),0));
+			if(!existe) {
+				cont.addplayer(new Player(textField.getText(),new String(pwfpasswrd.getPassword()),0));
 				Menu_Window mw= new Menu_Window(this.cont);
 				mw.setVisible(true);
 				this.dispose();
-			}
-		}
-		if(e.getSource()==btnSingUp) {
-				Register_Window mw= new Register_Window(this.cont);
-				mw.setVisible(true);
-				this.dispose();
+			}else {
+				
 			}
 		}
 	}
-
+}

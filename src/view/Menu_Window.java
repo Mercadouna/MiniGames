@@ -11,6 +11,7 @@ import javax.swing.border.EmptyBorder;
 import controlador.LoginControlador;
 
 import javax.swing.JButton;
+import javax.swing.ImageIcon;
 
 public class Menu_Window extends JFrame  implements ActionListener{
 
@@ -32,7 +33,8 @@ public class Menu_Window extends JFrame  implements ActionListener{
 		contentPane.setLayout(null);
 		
 		JButton btnGame_1_aim = new JButton("Aim Game");
-		btnGame_1_aim.setBounds(55, 104, 126, 143);
+		btnGame_1_aim.setIcon(new ImageIcon("C:\\Users\\20ala\\Downloads\\Logo+Mercadona+Web.png"));
+		btnGame_1_aim.setBounds(53, 104, 126, 143);
 		contentPane.add(btnGame_1_aim);
 		
 		JButton btnTrophyRoom = new JButton("Trophy room");

@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.TreeMap;
 
-public class ImplementationBD implements PlayerDAO{
+public  class ImplementationBD implements PlayerDAO{
 	// Atributos
 	private Connection con;
 	private PreparedStatement stmt;
@@ -24,7 +24,9 @@ public class ImplementationBD implements PlayerDAO{
 	private String userBD;
 	private String passwordBD;
 	final String SQL = "SELECT US_NAME, PASS FROM PLAYER WHERE US_NAME = ? AND PASS = ?";
+	final String comparePL = "call CheckPlayer(?)";
 	final String eliminarpr = "call DeleteUser(?)" ;
+	final String addpl = "call InsertPlayer(?, ?)" ;
 	final String TakeID = "SELECT id from PLAYER WHERE US_NAME =  ?";
 	final String sqlInsert = "INSERT INTO usuario VALUES ( ?,?)";
 	final String sqlConsulta = "SELECT * FROM usuario";
@@ -51,14 +53,14 @@ public class ImplementationBD implements PlayerDAO{
 			stmt = con.prepareStatement(SQL);	
 			stmt.setString(1, player.getName());
 			stmt.setString(2, player.getPassword());
-			ResultSet resultado = stmt.executeQuery();
+			ResultSet result = stmt.executeQuery();
 
 
-			if (resultado.next()) {
+			if (result.next()) {
 				exist = true;
 			}
 
-			resultado.close();
+			result.close();
 			stmt.close();
 			con.close();
 
@@ -71,22 +73,18 @@ public class ImplementationBD implements PlayerDAO{
 		return exist;
 	}
 
-
+	
 	@Override
 	public void deleteplayer(Player player) {
 		this.openConnection();
 		compareplayer(player);
-		try {
-			stmt = con.prepareStatement(TakeID);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-			
-
+		
+		
 	}
 
 
+	
+	
 	@Override
 	public boolean modificarpuntos(Player player) {
 		// TODO Auto-generated method stub
@@ -117,6 +115,51 @@ public class ImplementationBD implements PlayerDAO{
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+
+
+	@Override
+	public void addplayer(Player player) {
+		this.openConnection();
+		try {
+			stmt = con.prepareCall(addpl);
+			stmt.setString(1, player.getName());
+			stmt.setString(2, player.getPassword());
+			stmt.executeQuery();
+			stmt.close();
+			con.close();
+			
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+	}
+	
+	public boolean checkPL (Player player) {
+		this.openConnection();
+		boolean exist = false;
+		try {
+			stmt = con.prepareCall(comparePL);
+			stmt.setString(1, player.getName());
+			ResultSet result = stmt.executeQuery();
+			
+			if (result.next()) {
+				exist = true;
+			}
+
+			result.close();
+			stmt.close();
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return exist;
+
 	}
 
 

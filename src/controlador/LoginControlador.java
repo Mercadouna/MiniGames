@@ -10,4 +10,10 @@ public class LoginControlador {
 	public boolean compareplayer(Player player) {
 		return dao.compareplayer(player);
 	}
+	public void addplayer(Player player) {
+		dao.addplayer(player);
+	}
+	
+	
+	
 }
