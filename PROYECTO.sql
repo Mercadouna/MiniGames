@@ -64,27 +64,37 @@ INSERT INTO PLAYS VALUES (2, 'AIM', '2024-12-12', 20),
 (3, 'AIM', '2025-01-05', 30);
 
 -- Creation of different procedures and functions.
-/*Delimiter //
-create procedure MostrarUser()
+/*DELIMITER //
+create procedure MostrarPlayer1()
 begin
-declare id_user int;
-declare nombre varchar(20);
-declare contraseña varchar(30);
-declare points int;
-declare fin boolean default 0;
-declare c cursor for select Us_id, US_NAME, PASS, POINTS from PLAYER where POINTS >50;
-declare continue handler for not found set fin = 1; 
-open c;
-fetch c into id_user, nombre, contraseña, points;
-while fin=0 do
-select concat('ID:', id_user ,' Name: ', nombre, ' Password: ', contraseña ,' Points: ', points)'User data';
-fetch c into id_user, nombre, contraseña, points;
-end while;
-close c;
-end //
-Delimiter ;
+DECLARE id_user INT;
+DECLARE nombre VARCHAR(20);
+DECLARE contraseña VARCHAR(30);
+DECLARE points INT;
+DECLARE fin BOOLEAN DEFAULT FALSE;
+DECLARE records_found BOOLEAN DEFAULT FALSE;
+DECLARE c CURSOR FOR SELECT Us_id, US_NAME, PASS, POINTS FROM PLAYER WHERE POINTS > 50;
+DECLARE CONTINUE HANDLER FOR NOT FOUND SET fin = TRUE; 
+OPEN c;
+FETCH c INTO id_user, nombre, contraseña, points;
+ IF fin THEN
+	SELECT 'There are no users with more than 50 points.' AS 'Message';
+ELSE
+	SET records_found = TRUE;
+WHILE fin = FALSE DO
+
+	SELECT id_user AS 'ID', nombre AS 'Name', contraseña AS 'Password', points AS 'Points';
+	FETCH c INTO id_user, nombre, contraseña, points;
+END WHILE;
+ END IF;
+CLOSE c;
+END //
+DELIMITER ;
 -- to call the procedure
-call MostrarUser(); */
+call MostrarPlayer1(); 
+--  drop procedure MostrarPlayer;*/
+
+
 
 -- Creation of a procedure for inserting a player to the database.
 Delimiter //
@@ -94,14 +104,14 @@ declare Id_user int;
 if not exists(select * from Player where US_NAME=us_name and PASS=us_password) then 
 select max(Us_Id) + 1 into Id_user from Player;
 insert into Player values(Id_user, us_name, 0, us_password);
-select "Se ha creado correctamente";
+select "Successfully created";
 else 
-select "Ya existe";
+select "Already exists";
 end if;
 end //
 Delimiter ;
 -- to call the procedure
-call InsertPlayer('pep', '35264');
+-- call InsertPlayer('pep', '35264');
 
 -- Creation of a procedure to remove a player from the database by the id.
 Delimiter //
@@ -109,9 +119,9 @@ create procedure DeletePlayer(id int)
 Begin
 if exists (select * from PLayer where Us_Id=id) then 
 delete from PLayer where Us_Id=id;
-select "Se ha eliminado correctamente" ;
+select "Successfully deleted" ;
 else
-select "No existe el Pedido";
+select "The player does not exist";
 end if;
 end //
 DELIMITER ;
@@ -127,7 +137,7 @@ declare current_price INT;
 select PRICE into current_price from TROPHYE where  T_NAME= nameP;
 if current_price is not null then 
 update TROPHYE set PRICE= Price where  T_NAME= nameP;
-select "have been modificated";
+select "Have been modificated";
 else 
 select "Doesn't exist that Prize";
 end if;
@@ -203,45 +213,41 @@ Delimiter //
 create function CheckPlayer(nom_us varchar(50), password_us varchar(50))
 returns boolean deterministic
 begin
-declare exist boolean default 0;
+declare exist boolean default false;
 if exists (select * from PLAYER where US_NAME=nom_us and PASS=password_us) then 
- set exist= 1;
+ set exist= true;
  return exist;
  else 
-set exist=0;
+set exist=false;
 return exist;
 end if;
 end //
 Delimiter ;
-
-/*Delimiter //
-create function CheckUser2(nom_us varchar(50), password_us varchar(50))
-returns boolean deterministic
-begin
-declare exist boolean default 0;
-if exists (select * from PLAYER where US_NAME=nom_us and PASS=password_us) then 
- set exist= 1;
- return exist;
- else 
-set exist=0;
-return exist;
-end if;
-end //
-Delimiter ;*/
--- to select the function 
+-- to select the function
 -- select CheckPlayer('Mikel','321');
 
 
 
-/*Delimiter //
-create Procedure ModifyUserPointsGame(name_us varchar(50), win_poitns int)
+Delimiter //
+create Procedure ModifyUserPointsGame(name_us varchar(50), win_poitns int, name_game varchar(50))
 begin
 declare new_points int;
-if not exists (select * from 
-
+declare user_id int;
+select Us_Id into user_id from PLAYER where  US_NAME=name_us;
+if exists (select * from PLAYER where US_NAME=name_us) and exists (select * from GAME where G_NAME=name_game) then
+update PLAYER set POINTS=POINTS+win_poitns where Us_Id=user_id;
+insert into PLAYS values (user_id, name_game, curdate(), win_poitns);
+Select 'Have been modificated correctly';
+else
+select 'The game or the player does not exist';
+end if ;
 end //
-Delimiter ;*/
--- drop database MINIGAMES;
--- drop procedure         ;
--- drop function        ;
+Delimiter ;
+-- to call the procedure
+-- call ModifyUserPointsGame('Mikel', 20, 'ARITMETICS');
 
+
+
+-- drop database MINIGAMES;
+-- drop procedure       ;
+-- drop function        ;
