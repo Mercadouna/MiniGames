@@ -1,11 +1,13 @@
 package model;
 
 import java.sql.Connection;
+import java.util.random.*;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Map;
+import java.util.Random;
 import java.util.ResourceBundle;
 import java.util.TreeMap;
 
@@ -24,8 +26,9 @@ public  class ImplementationBD implements PlayerDAO{
 	private String userBD;
 	private String passwordBD;
 	final String SQL = "SELECT US_NAME, PASS FROM PLAYER WHERE US_NAME = ? AND PASS = ?";
-	final String comparePL = "select CheckPlayer(?)";
+	final String comparePL = "SELECT US_NAME FROM PLAYER WHERE US_NAME = ? ";
 	final String eliminarpr = "call DeleteUser(?)" ;
+	final String CHECKPL = "SELECT US_NAME FROM PLAYER WHERE US_NAME = ?";
 	final String addpl = "call InsertPlayer(?, ?)" ;
 	final String TakeID = "SELECT id from PLAYER WHERE US_NAME =  ?";
 	final String sqlInsert = "INSERT INTO usuario VALUES ( ?,?)";
@@ -75,20 +78,35 @@ public  class ImplementationBD implements PlayerDAO{
 
 	
 	@Override
-	public void deleteplayer(Player player) {
-		this.openConnection();
-		compareplayer(player);
+		public void deleteplayer(Player player) {
+		    this.openConnection();
+		    try {
+		        stmt = con.prepareCall("call DeletePlayer(?)"); 
+		        stmt.setInt(1, Integer.parseInt(ReturnID(player))); 
+		        stmt.executeUpdate();
+		        stmt.close();
+		        con.close();
+		    } catch (SQLException e) {
+		        System.out.println("Error al eliminar al jugador: " + e.getMessage());
+		        e.printStackTrace();
+		    }
+		}
+	
+
+
+	public int RandomPoints(Player player) {
 		
+		int randomNum = (int)(Math.random() * 300); // 0 to 100
+		
+		return randomNum;
 		
 	}
-
-
-	
 	
 	@Override
-	public boolean modificarpuntos(Player player) {
-		// TODO Auto-generated method stub
-		return false;
+	public void modificarpuntos(Player player) {
+		
+		
+		
 	}
 
 
@@ -143,11 +161,11 @@ public  class ImplementationBD implements PlayerDAO{
 	    this.openConnection();
 	    boolean exist = false;
 	    try {
-	        stmt = con.prepareStatement(comparePL); // Llama a la función
+	        stmt = con.prepareStatement(CHECKPL);
 	        stmt.setString(1, player.getName());
 	        ResultSet resultSet = stmt.executeQuery();
 	        if (resultSet.next()) {
-	            exist = resultSet.getBoolean(1); // Obtiene el valor booleano de la función
+	            exist = true;
 	        }
 	        resultSet.close();
 	        stmt.close();
@@ -160,7 +178,25 @@ public  class ImplementationBD implements PlayerDAO{
 
 
 
+	public String ReturnID(Player player){
+	    this.openConnection();
+	    String id = "";
+	    try{
+	        PreparedStatement stm = con.prepareStatement("select ReturnID(?,?)");
+	        stm.setString(1, player.getName());
+	        stm.setString(2, player.getPassword());
+	        ResultSet rs = stm.executeQuery();
+	        if(rs.next()){
+	            id = rs.getString(1);
+	        }
+	        stm.close();
+	        con.close();
+	    }catch (Exception e){
+	        e.printStackTrace();
+	    }
 
+	    return id;
+	}
 
 
 
