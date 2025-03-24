@@ -7,7 +7,7 @@ USE MINIGAMES;
 -- Creation of the tables.
 CREATE TABLE PLAYER(
 Us_Id int auto_increment not null primary key,
-US_NAME VARCHAR(50),
+US_NAME  VARCHAR(50) unique,
 POINTS int default 0,
 PASS VARCHAR(50)
 );
@@ -64,35 +64,31 @@ INSERT INTO PLAYS VALUES (2, 'AIM', '2024-12-12', 20),
 (3, 'AIM', '2025-01-05', 30);
 
 -- Creation of different procedures and functions.
-/*DELIMITER //
-create procedure MostrarPlayer1()
+-- 	It is a procedure to be able to show players with more than 50 points.
+DELIMITER //
+create procedure MostrarPlayer()
 begin
-DECLARE id_user INT;
-DECLARE nombre VARCHAR(20);
-DECLARE contraseña VARCHAR(30);
-DECLARE points INT;
-DECLARE fin BOOLEAN DEFAULT FALSE;
-DECLARE records_found BOOLEAN DEFAULT FALSE;
-DECLARE c CURSOR FOR SELECT Us_id, US_NAME, PASS, POINTS FROM PLAYER WHERE POINTS > 50;
-DECLARE CONTINUE HANDLER FOR NOT FOUND SET fin = TRUE; 
-OPEN c;
-FETCH c INTO id_user, nombre, contraseña, points;
- IF fin THEN
-	SELECT 'There are no users with more than 50 points.' AS 'Message';
-ELSE
-	SET records_found = TRUE;
-WHILE fin = FALSE DO
+declare id_user int;
+declare nombre varchar(50);
+declare contrasena varchar(50);
+declare pointss int;
+declare fin boolean default 0;
+declare c cursor for select Us_id, US_NAME, PASS, POINTS from PLAYER where POINTS > 50;
+declare continue handler for not found set fin = 1; 
+open c;
+	fetch c into id_user, nombre, contrasena, pointss;
+		while fin = 0 do
+			select id_user as 'ID', nombre as 'Name', contrasena as 'Password', pointss as 'Points';
+			fetch c into id_user, nombre, contrasena, pointss;
+		end while;
+close c;
+end //
+Delimiter ;
 
-	SELECT id_user AS 'ID', nombre AS 'Name', contraseña AS 'Password', points AS 'Points';
-	FETCH c INTO id_user, nombre, contraseña, points;
-END WHILE;
- END IF;
-CLOSE c;
-END //
-DELIMITER ;
 -- to call the procedure
-call MostrarPlayer1(); 
---  drop procedure MostrarPlayer;*/
+-- call MostrarPlayer(); 
+-- select * from PLAYER where POINTS > 50;
+-- drop procedure MostrarPlayer;
 
 
 
@@ -210,11 +206,11 @@ Delimiter ;
 
 -- Creation of a function to check if a player is registered or not in the database.
 Delimiter //
-create function CheckPlayer(nom_us varchar(50), password_us varchar(50))
+create function CheckPlayer(nom_us varchar(50))
 returns boolean deterministic
 begin
 declare exist boolean default false;
-if exists (select * from PLAYER where US_NAME=nom_us and PASS=password_us) then 
+if exists (select * from PLAYER where US_NAME=nom_us) then 
  set exist= true;
  return exist;
  else 
@@ -224,10 +220,10 @@ end if;
 end //
 Delimiter ;
 -- to select the function
--- select CheckPlayer('Mikel','321');
+-- select CheckPlayer('Mikel');
 
 
-
+-- A procedure for updating a player's points after a game has been played.
 Delimiter //
 create Procedure ModifyUserPointsGame(name_us varchar(50), win_poitns int, name_game varchar(50))
 begin
