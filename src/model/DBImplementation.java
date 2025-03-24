@@ -25,7 +25,7 @@ public  class DBImplementation implements PlayerDAO{
 	private String passwordBD;
 	final String SQL = "SELECT US_NAME, PASS FROM PLAYER WHERE US_NAME = ? AND PASS = ?";
 	final String comparePL = "call CheckPlayer(?)";
-	final String eliminarpr = "DELETE FROM player WHERE id=?" ;
+	final String delPlayer= "DELETE FROM player WHERE id=?" ;
 	final String addpl = "call InsertPlayer(?, ?)" ;
 	final String TakeID = "SELECT id from PLAYER WHERE US_NAME =  ?";
 	final String sqlInsert = "INSERT INTO usuario VALUES ( ?,?)";
@@ -68,18 +68,29 @@ public  class DBImplementation implements PlayerDAO{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
-
 		return exist;
 	}
 
 	
 	@Override
-	public void deleteplayer(Player player) {
+	public boolean deleteplayer(Player player) {
 		this.openConnection();
-		compareplayer(player);
+		if(compareplayer(player)) {
+			
+			try {
+				stmt = con.prepareCall(delPlayer);
+				stmt.setString(1, returnID(player));
+				stmt.executeQuery();
+				stmt.close();
+				con.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		}
 		
-		
+		return true;
 	}
 
 
@@ -162,7 +173,25 @@ public  class DBImplementation implements PlayerDAO{
 
 	}
 
+	public String returnID(Player player){
+	    this.openConnection();
+	    String id = "";
+	    try{
+	        PreparedStatement stm = con.prepareStatement("select ReturnID(?,?)");
+	        stm.setString(1, player.getName());
+	        stm.setString(2, player.getPassword());
+	        ResultSet rs = stm.executeQuery();
+	        if(rs.next()){
+	            id = rs.getString(1);
+	        }
+	        stm.close();
+	        con.close();
+	    }catch (Exception e){
+	        e.printStackTrace();
+	    }
 
+	    return id;
+	}
 
 
 
