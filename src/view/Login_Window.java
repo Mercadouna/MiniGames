@@ -28,9 +28,12 @@ public class Login_Window extends JFrame implements ActionListener {
 	JButton btnSingUp = new JButton("Sign up");
 	private LoginControlador cont;
 	private JTextField textField;
-	/**
+	private JLabel lblMSG = new JLabel("");
+	
+	/*
 	 * Create the frame.
 	 */
+	
 	public Login_Window(LoginControlador controler) {
 		this.cont=controler;
 		setTitle("Login_Minigames");
@@ -42,42 +45,40 @@ public class Login_Window extends JFrame implements ActionListener {
 
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		
-		
+
+
 		JLabel lblNewLabel = new JLabel("Username :");
-		lblNewLabel.setForeground(new Color(255, 255, 0));
-		lblNewLabel.setFont(new Font("Snap ITC", Font.BOLD, 17));
+		lblNewLabel.setForeground(new Color(0, 0, 0));
+		lblNewLabel.setFont(new Font("Tempus Sans ITC", Font.BOLD, 17));
 		lblNewLabel.setBounds(40, 65, 151, 14);
 		contentPane.add(lblNewLabel);
-		
+
 		JLabel lblNewLabel_1 = new JLabel("Password :");
-		lblNewLabel_1.setForeground(new Color(255, 255, 0));
-		lblNewLabel_1.setFont(new Font("Snap ITC", Font.BOLD, 17));
+		lblNewLabel_1.setForeground(new Color(0, 0, 0));
+		lblNewLabel_1.setFont(new Font("Tempus Sans ITC", Font.BOLD, 17));
 		lblNewLabel_1.setBounds(40, 148, 151, 14);
 		contentPane.add(lblNewLabel_1);
-		
+
 		pwfpasswrd = new JPasswordField();
 		pwfpasswrd.setBounds(184, 145, 194, 20);
 		contentPane.add(pwfpasswrd);
-		
-		
-		btnLogIn.setBackground(new Color(255, 255, 0));
-		btnLogIn.setForeground(new Color(255, 168, 81));
-		btnLogIn.setFont(new Font("Snap ITC", Font.BOLD, 17));
+		btnLogIn.setForeground(new Color(255, 128, 0));
+		btnLogIn.setFont(new Font("Tempus Sans ITC", Font.BOLD, 17));
 		btnLogIn.setBounds(55, 213, 117, 23);
 		contentPane.add(btnLogIn);
-		
-		
-		btnSingUp.setBackground(new Color(255, 255, 0));
-		btnSingUp.setForeground(new Color(255, 168, 81));
-		btnSingUp.setFont(new Font("Snap ITC", Font.BOLD, 17));
+		btnSingUp.setForeground(new Color(255, 128, 0));
+		btnSingUp.setFont(new Font("Tempus Sans ITC", Font.BOLD, 17));
 		btnSingUp.setBounds(259, 213, 119, 23);
 		contentPane.add(btnSingUp);
-		
+
 		textField = new JTextField();
 		textField.setBounds(184, 65, 194, 20);
 		contentPane.add(textField);
 		textField.setColumns(10);
+
+		
+		lblMSG.setBounds(76, 11, 251, 14);
+		contentPane.add(lblMSG);
 		btnLogIn.addActionListener(this);
 		btnSingUp.addActionListener(this);
 	}
@@ -90,13 +91,15 @@ public class Login_Window extends JFrame implements ActionListener {
 				Menu_Window mw= new Menu_Window(this.cont);
 				mw.setVisible(true);
 				this.dispose();
+			}else {
+				lblMSG.setText("El usuario o la contraseña son incorrectos.");
 			}
 		}
 		if(e.getSource()==btnSingUp) {
-				Register_Window mw= new Register_Window(this.cont);
-				mw.setVisible(true);
-				this.dispose();
-			}
+			Register_Window mw= new Register_Window(this.cont);
+			mw.setVisible(true);
+			this.dispose();
 		}
 	}
+}
 
