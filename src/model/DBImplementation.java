@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.TreeMap;
 
-public  class ImplementationBD implements PlayerDAO{
+public  class DBImplementation implements PlayerDAO{
 	// Atributos
 	private Connection con;
 	private PreparedStatement stmt;
@@ -25,7 +25,7 @@ public  class ImplementationBD implements PlayerDAO{
 	private String passwordBD;
 	final String SQL = "SELECT US_NAME, PASS FROM PLAYER WHERE US_NAME = ? AND PASS = ?";
 	final String comparePL = "call CheckPlayer(?)";
-	final String eliminarpr = "call DeleteUser(?)" ;
+	final String eliminarpr = "DELETE FROM player WHERE id=?" ;
 	final String addpl = "call InsertPlayer(?, ?)" ;
 	final String TakeID = "SELECT id from PLAYER WHERE US_NAME =  ?";
 	final String sqlInsert = "INSERT INTO usuario VALUES ( ?,?)";
@@ -34,7 +34,7 @@ public  class ImplementationBD implements PlayerDAO{
 	final String SQLMODIFICAR = "UPDATE usuario SET contraseña=? WHERE nombre=?";
 
 
-	public ImplementationBD() {
+	public DBImplementation() {
 		this.configFile = ResourceBundle.getBundle("configClase");
 		this.driverBD = this.configFile.getString("Driver");
 		this.urlBD = this.configFile.getString("Conn");

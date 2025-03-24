@@ -7,7 +7,7 @@ import model.PlayerDAO;
 import view.Login_Window;
 
 public class LoginControlador {
-	PlayerDAO dao = (PlayerDAO) new model.ImplementationBD();
+	PlayerDAO dao = (PlayerDAO) new model.DBImplementation();
 	public void show_window() {
 		Login_Window frame = new Login_Window(this);
 		frame.setVisible(true);
