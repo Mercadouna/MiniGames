@@ -96,7 +96,7 @@ public  class ImplementationBD implements PlayerDAO{
 
 	public int RandomPoints(Player player) {
 		
-		int randomNum = (int)(Math.random() * 300); // 0 to 100
+		int randomNum = (int)(Math.random() * 300); 
 		
 		return randomNum;
 		
@@ -104,9 +104,19 @@ public  class ImplementationBD implements PlayerDAO{
 	
 	@Override
 	public void modificarpuntos(Player player) {
-		
-		
-		
+	    this.openConnection();
+	    try {
+	        PreparedStatement stm = con.prepareStatement("UPDATE PLAYER SET POINTS = ? WHERE US_NAME = ?");
+	        stm.setInt(1, player.getPoints());
+	        stm.setString(2, player.getName());
+	        stm.executeUpdate();
+
+	        stm.close();
+	        con.close();
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+
 	}
 
 
@@ -178,23 +188,23 @@ public  class ImplementationBD implements PlayerDAO{
 
 
 
-	public String ReturnID(Player player){
+	public String ReturnID(Player player) {
 	    this.openConnection();
 	    String id = "";
-	    try{
-	        PreparedStatement stm = con.prepareStatement("select ReturnID(?,?)");
+	    try {
+	        PreparedStatement stm = con.prepareStatement("SELECT Us_Id FROM PLAYER WHERE US_NAME = ? AND PASS = ?");
 	        stm.setString(1, player.getName());
 	        stm.setString(2, player.getPassword());
 	        ResultSet rs = stm.executeQuery();
-	        if(rs.next()){
-	            id = rs.getString(1);
+	        if (rs.next()) {
+	            id = rs.getString("Us_Id");
 	        }
+	        rs.close();
 	        stm.close();
 	        con.close();
-	    }catch (Exception e){
+	    } catch (SQLException e) {
 	        e.printStackTrace();
 	    }
-
 	    return id;
 	}
 
