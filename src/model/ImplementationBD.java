@@ -34,7 +34,8 @@ public  class ImplementationBD implements PlayerDAO{
 	final String sqlInsert = "INSERT INTO usuario VALUES ( ?,?)";
 	final String sqlConsulta = "SELECT * FROM usuario";
 	final String SQLBORRAR = "DELETE FROM usuario WHERE nombre=?";
-	final String SQLMODIFICAR = "UPDATE usuario SET contraseña=? WHERE nombre=?";
+	final String MODPOINTS = "UPDATE PLAYER SET POINTS = ? WHERE US_NAME = ?";
+	final String OBTAINPOINTS = "SELECT POINTS FORM PLAYER WHERE US_NAME = ?";
 
 
 	public ImplementationBD() {
@@ -94,7 +95,7 @@ public  class ImplementationBD implements PlayerDAO{
 	
 
 
-	public int RandomPoints(Player player) {
+	public int RandomPoints() {
 		
 		int randomNum = (int)(Math.random() * 300); 
 		
@@ -105,12 +106,13 @@ public  class ImplementationBD implements PlayerDAO{
 	@Override
 	public void modificarpuntos(Player player) {
 	    this.openConnection();
+	    int randpoint;
+	    randpoint =  RandomPoints();
 	    try {
-	        PreparedStatement stm = con.prepareStatement("UPDATE PLAYER SET POINTS = ? WHERE US_NAME = ?");
-	        stm.setInt(1, player.getPoints());
+	        PreparedStatement stm = con.prepareStatement(MODPOINTS);
+	        stm.setInt(1, player.getPoints()+randpoint);
 	        stm.setString(2, player.getName());
 	        stm.executeUpdate();
-
 	        stm.close();
 	        con.close();
 	    } catch (SQLException e) {
@@ -209,7 +211,24 @@ public  class ImplementationBD implements PlayerDAO{
 	}
 
 
-
+	public int obtpoints(Player player) {
+	    this.openConnection();
+	    int points = 0;
+	    try {
+	        PreparedStatement stm = con.prepareStatement("SELECT POINTS FROM PLAYER WHERE US_NAME = ?");
+	        stm.setString(1, player.getName());
+	        ResultSet rs = stm.executeQuery();
+	        if (rs.next()) {
+	            points = rs.getInt("POINTS");
+	        }
+	        rs.close();
+	        stm.close();
+	        con.close();
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    return points;
+	}
 	/*public boolean comprobarUsuario(Usuario usuario){
 		// Abrimos la conexion
 		boolean existe=false;

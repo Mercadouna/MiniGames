@@ -75,20 +75,19 @@ public class Register_Window extends JFrame implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
-		boolean existe;
-		
-		 if (e.getSource() == btnSingUp) {
-		        existe = cont.checkPL(new Player(textField.getText(), new String(pwfpasswrd.getPassword()), 0));
-		        if (!existe) {
-		            cont.addplayer(new Player(textField.getText(), new String(pwfpasswrd.getPassword()), 0));
-		            Menu_Window mw = new Menu_Window(this.cont);
-		            mw.setVisible(true);
-		            this.dispose();
-		        } else {
-		            //Añadir que hacer en caso de que el usuario ya existe.
-		        }
-		    }
-		}
+	    boolean existe;
+	    if (e.getSource() == btnSingUp) {
+	        existe = cont.checkPL(new Player(textField.getText(), new String(pwfpasswrd.getPassword()), 0));
+	        if (!existe) {
+	            cont.addplayer(new Player(textField.getText(), new String(pwfpasswrd.getPassword()), 0));
+	            // Obtener los puntos del jugador (deberían ser 0 para un nuevo jugador)
+	            int playerPoints = cont.obtpoints(new Player(textField.getText(), new String(pwfpasswrd.getPassword()), 0));
+	            Menu_Window mw = new Menu_Window(this.cont, new Player(textField.getText(), new String(pwfpasswrd.getPassword()), playerPoints));
+	            mw.setVisible(true);
+	            this.dispose();
+	        } else {
+	            // Añadir que hacer en caso de que el usuario ya existe.
+	        }
+	    }
 	}
-
+	}

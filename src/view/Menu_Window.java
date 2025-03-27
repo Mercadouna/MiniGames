@@ -9,6 +9,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import controlador.LoginControlador;
+import model.Player;
 
 import javax.swing.JButton;
 import javax.swing.ImageIcon;
@@ -21,13 +22,16 @@ public class Menu_Window extends JFrame  implements ActionListener{
 	private JButton btnGame_2_math;
 	private JButton btnTrophyRoom;
 	private JButton btnGame_1_aim;
+	private Player j;
 	
 	/**
 	 * Create the frame.
+	 * @param j 
 	 * @param cont 
 	 */
-	public Menu_Window(LoginControlador controler) {
+	public Menu_Window(LoginControlador controler, Player j) {
 		this.cont =controler;
+		this.j = j;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 843, 521);
 		contentPane = new JPanel();
@@ -57,8 +61,11 @@ public class Menu_Window extends JFrame  implements ActionListener{
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		if(e.getSource()==btnGame_1_aim) {
-			
+			j.setPoints(cont.obtpoints(j));
+			cont.modificarpuntos(j);
 			Game_1_Window g1 = new Game_1_Window (this.cont);
+			
+			
 			g1.setVisible(true);
 			
 			

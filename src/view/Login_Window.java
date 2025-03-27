@@ -84,14 +84,23 @@ public class Login_Window extends JFrame implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
-		if(e.getSource()==btnLogIn) {
-			if (cont.compareplayer(new Player(textField.getText(),new String(pwfpasswrd.getPassword()),0))){
-				Menu_Window mw= new Menu_Window(this.cont);
-				mw.setVisible(true);
-				this.dispose();
-			}
-		}
+	    if (e.getSource() == btnLogIn) {
+	    	 // Obtener los puntos del jugador desde la base de datos
+	    	Player j = new Player(textField.getText(), new String(pwfpasswrd.getPassword()), 0);
+            int playerPoints = cont.obtpoints(j);
+            j.setPoints(playerPoints);
+          
+            
+	        if (cont.compareplayer(j)==true) {
+	        	Menu_Window mw = new Menu_Window(this.cont, j);
+	            mw.setVisible(true);
+	            this.dispose();
+	        }else {
+	        	
+	        }
+	    }
+	 
+	
 		if(e.getSource()==btnSingUp) {
 				Register_Window mw= new Register_Window(this.cont);
 				mw.setVisible(true);

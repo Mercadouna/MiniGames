@@ -17,23 +17,7 @@ public class Game_1_Window extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		try {
-			Game_1_Window dialog = new Game_1_Window(null);
-			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-			dialog.setVisible(true);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
 
-	/**
-	 * Create the dialog.
-	 * @param cont 
-	 */
 	public Game_1_Window(LoginControlador cont) {
 		setBounds(100, 100, 814, 499);
 		getContentPane().setLayout(null);

@@ -16,6 +16,13 @@ public class LoginControlador {
 	public boolean checkPL(Player player) {
 		return dao.checkPL(player);
 	}
-	
-	
+	public int  RandomPoints() {
+		return dao.RandomPoints();
+	}
+	public void modificarpuntos(Player player) {
+		dao.modificarpuntos(player);
+	}
+	public int obtpoints(Player player) {
+		return dao.obtpoints(player);
+	}
 }
