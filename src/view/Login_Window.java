@@ -36,6 +36,8 @@ public class Login_Window extends JFrame implements ActionListener {
 	 */
 	
 	public Login_Window(LoginControlador controler) {
+		setBackground(new Color(255, 255, 255));
+		setForeground(new Color(255, 255, 255));
 		setIconImage(Toolkit.getDefaultToolkit().getImage(Login_Window.class.getResource("/images/game-controller-icon-illustration-free-vector.jpg")));
 		this.cont=controler;
 		setTitle("Login_Minigames");

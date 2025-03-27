@@ -26,7 +26,8 @@ public class Menu_Window extends JFrame  implements ActionListener{
 	private LoginControlador cont;
 	private JButton btnGame_1_aim = new JButton("Aim Game");
 
-	
+	private JButton btnERASEACC = new JButton("Erase Account");
+
 	public Menu_Window(LoginControlador controler) {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(Menu_Window.class.getResource("/images/game-controller-icon-illustration-free-vector.jpg")));
 		this.cont =controler;
