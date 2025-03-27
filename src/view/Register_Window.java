@@ -83,7 +83,7 @@ public class Register_Window extends JFrame implements ActionListener {
 		if(e.getSource()==btnSingUp) {
 			if(!cont.compareplayer(new Player(textField.getText(),new String(pwfpasswrd.getPassword()),0))) {
 				cont.addplayer(new Player(textField.getText(),new String(pwfpasswrd.getPassword()),0));
-				Menu_Window mw= new Menu_Window(this.cont);
+				Menu_Window mw= new Menu_Window(cont);
 				mw.setVisible(true);
 				this.dispose();
 			}else {

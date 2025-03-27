@@ -88,7 +88,7 @@ public class Login_Window extends JFrame implements ActionListener {
 		// TODO Auto-generated method stub
 		if(e.getSource()==btnLogIn) {
 			if (cont.compareplayer(new Player(textField.getText(),new String(pwfpasswrd.getPassword()),0))){
-				Menu_Window mw= new Menu_Window(this.cont);
+				Menu_Window mw= new Menu_Window(cont);
 				mw.setVisible(true);
 				this.dispose();
 			}else {
