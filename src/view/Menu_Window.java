@@ -17,17 +17,18 @@ import javax.swing.JLabel;
 import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Font;
+import javax.swing.JScrollPane;
+import java.awt.Toolkit;
 
 public class Menu_Window extends JFrame  implements ActionListener{
 
 	private JPanel contentPane;
 	private LoginControlador cont;
+	private JButton btnGame_1_aim = new JButton("Aim Game");
 
-	/**
-	 * Create the frame.
-	 * @param cont 
-	 */
+	
 	public Menu_Window(LoginControlador controler) {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(Menu_Window.class.getResource("/images/game-controller-icon-illustration-free-vector.jpg")));
 		this.cont =controler;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 619, 578);
@@ -37,12 +38,13 @@ public class Menu_Window extends JFrame  implements ActionListener{
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		JButton btnGame_1_aim = new JButton("Aim Game");
-		btnGame_1_aim.setBounds(68, 172, 126, 143);
+		btnGame_1_aim.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		btnGame_1_aim.setBounds(49, 172, 126, 143);
 		contentPane.add(btnGame_1_aim);
-		ImageIcon icono = new ImageIcon("/iconos/Bullseye-Img.png"); // Ruta de la imagen
-		btnGame_1_aim.setIcon(icono);
-		//btnGame_1_aim.setIcon(new ImageIcon(getClass().getResource("/icons/Bullseye-Image.png")));
+		btnGame_1_aim.setIcon(new ImageIcon(Menu_Window.class.getResource("/images/AimGameIcon.png")));
 		JButton btnTrophyRoom = new JButton("Trophy room");
 		btnTrophyRoom.setBounds(139, 444, 261, 57);
 		contentPane.add(btnTrophyRoom);

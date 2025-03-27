@@ -19,6 +19,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import java.awt.Color;
+import java.awt.Toolkit;
 
 public class Login_Window extends JFrame implements ActionListener {
 
@@ -35,6 +36,7 @@ public class Login_Window extends JFrame implements ActionListener {
 	 */
 	
 	public Login_Window(LoginControlador controler) {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(Login_Window.class.getResource("/images/game-controller-icon-illustration-free-vector.jpg")));
 		this.cont=controler;
 		setTitle("Login_Minigames");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
