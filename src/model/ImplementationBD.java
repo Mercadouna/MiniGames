@@ -35,6 +35,7 @@ public  class ImplementationBD implements PlayerDAO{
 	final String sqlConsulta = "SELECT * FROM usuario";
 	final String SQLBORRAR = "DELETE FROM usuario WHERE nombre=?";
 	final String SQLMODIFICAR = "UPDATE usuario SET contraseña=? WHERE nombre=?";
+	final String SqleliminarHistorial= "Delete from PLAYS where Us_Id=(select Us_Id from PLAYER where name=?";
 
 
 	public ImplementationBD() {
@@ -113,14 +114,33 @@ public  class ImplementationBD implements PlayerDAO{
 	@Override
 	public boolean eliminarhist(Player player) {
 		// TODO Auto-generated method stub
-		return false;
+		boolean ok=false;
+		
+		this.openConnection();
+		try {
+			// Preparamos la sentencia stmt con la conexion y sentencia sql correspondiente
+
+			stmt = con.prepareStatement(SqleliminarHistorial);
+			stmt.setString(1, player.getName());
+			if (stmt.executeUpdate()>0) {
+				ok=true;
+			}
+			
+            stmt.close();
+            con.close();
+		  } catch (SQLException e) {
+             System.out.println("Error al verificar credenciales: " + e.getMessage());
+        }
+	
+		return ok;
+		
 	}
 
 
 	@Override
-	public boolean visualizarhist(Player player) {
+	public void visualizarhist(Player player) {
 		// TODO Auto-generated method stub
-		return false;
+		
 	}
 
 
