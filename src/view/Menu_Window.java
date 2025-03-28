@@ -32,7 +32,7 @@ public class Menu_Window extends JFrame  implements ActionListener{
 		setIconImage(Toolkit.getDefaultToolkit().getImage(Menu_Window.class.getResource("/images/game-controller-icon-illustration-free-vector.jpg")));
 		this.cont =controler;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 619, 578);
+		setBounds(100, 100, 800, 500);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
@@ -43,25 +43,25 @@ public class Menu_Window extends JFrame  implements ActionListener{
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
-		btnGame_1_aim.setBounds(49, 172, 126, 143);
+		btnGame_1_aim.setBounds(36, 101, 126, 143);
 		contentPane.add(btnGame_1_aim);
 		btnGame_1_aim.setIcon(new ImageIcon(Menu_Window.class.getResource("/images/AimGameIcon.png")));
 		JButton btnTrophyRoom = new JButton("Trophy room");
-		btnTrophyRoom.setBounds(139, 444, 261, 57);
+		btnTrophyRoom.setBounds(513, 375, 261, 57);
 		contentPane.add(btnTrophyRoom);
 		
 		JButton btnGame_2_math = new JButton("Math Game");
-		btnGame_2_math.setBounds(365, 172, 126, 143);
+		btnGame_2_math.setBounds(218, 101, 126, 143);
 		contentPane.add(btnGame_2_math);
 		
 		JButton btnLOGOUT = new JButton("Log Out");
-		btnLOGOUT.setBounds(296, 11, 132, 43);
+		btnLOGOUT.setBounds(500, 11, 132, 43);
 		contentPane.add(btnLOGOUT);
 		
 		JButton btnERASEACC = new JButton("Erase Account");
 		btnERASEACC.setFont(new Font("OCR A Extended", Font.PLAIN, 11));
 		btnERASEACC.setForeground(new Color(255, 0, 0));
-		btnERASEACC.setBounds(461, 11, 132, 43);
+		btnERASEACC.setBounds(642, 11, 132, 43);
 		contentPane.add(btnERASEACC);
 		
 		JLabel lblNewLabel = new JLabel("New label");

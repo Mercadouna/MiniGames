@@ -42,7 +42,7 @@ public class Login_Window extends JFrame implements ActionListener {
 		this.cont=controler;
 		setTitle("Login_Minigames");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
+		setBounds(100, 100, 800, 500);
 		contentPane = new JPanel();
 		contentPane.setBackground(new Color(255, 168, 81));
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -53,35 +53,35 @@ public class Login_Window extends JFrame implements ActionListener {
 
 		JLabel lblNewLabel = new JLabel("Username :");
 		lblNewLabel.setForeground(new Color(0, 0, 0));
-		lblNewLabel.setFont(new Font("Tempus Sans ITC", Font.BOLD, 17));
-		lblNewLabel.setBounds(40, 65, 151, 14);
+		lblNewLabel.setFont(new Font("Tempus Sans ITC", Font.BOLD, 26));
+		lblNewLabel.setBounds(40, 108, 194, 44);
 		contentPane.add(lblNewLabel);
 
 		JLabel lblNewLabel_1 = new JLabel("Password :");
 		lblNewLabel_1.setForeground(new Color(0, 0, 0));
-		lblNewLabel_1.setFont(new Font("Tempus Sans ITC", Font.BOLD, 17));
-		lblNewLabel_1.setBounds(40, 148, 151, 14);
+		lblNewLabel_1.setFont(new Font("Tempus Sans ITC", Font.BOLD, 26));
+		lblNewLabel_1.setBounds(40, 240, 194, 35);
 		contentPane.add(lblNewLabel_1);
 
 		pwfpasswrd = new JPasswordField();
-		pwfpasswrd.setBounds(184, 145, 194, 20);
+		pwfpasswrd.setBounds(516, 240, 213, 40);
 		contentPane.add(pwfpasswrd);
 		btnLogIn.setForeground(new Color(255, 128, 0));
 		btnLogIn.setFont(new Font("Tempus Sans ITC", Font.BOLD, 17));
-		btnLogIn.setBounds(55, 213, 117, 23);
+		btnLogIn.setBounds(40, 393, 117, 23);
 		contentPane.add(btnLogIn);
 		btnSingUp.setForeground(new Color(255, 128, 0));
 		btnSingUp.setFont(new Font("Tempus Sans ITC", Font.BOLD, 17));
-		btnSingUp.setBounds(259, 213, 119, 23);
+		btnSingUp.setBounds(610, 393, 119, 23);
 		contentPane.add(btnSingUp);
 
 		textField = new JTextField();
-		textField.setBounds(184, 65, 194, 20);
+		textField.setBounds(516, 107, 213, 45);
 		contentPane.add(textField);
 		textField.setColumns(10);
 
 		
-		lblMSG.setBounds(76, 11, 251, 14);
+		lblMSG.setBounds(78, 11, 619, 44);
 		contentPane.add(lblMSG);
 		btnLogIn.addActionListener(this);
 		btnSingUp.addActionListener(this);

@@ -33,7 +33,7 @@ public class Trophy_Window extends JDialog {
 	 * Create the dialog.
 	 */
 	public Trophy_Window() {
-		setBounds(100, 100, 836, 490);
+		setBounds(100, 100, 800, 500);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);

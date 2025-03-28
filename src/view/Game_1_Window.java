@@ -29,7 +29,7 @@ public class Game_1_Window extends JDialog {
 	 * Create the dialog.
 	 */
 	public Game_1_Window() {
-		setBounds(100, 100, 814, 499);
+		setBounds(100, 100, 800, 500);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
