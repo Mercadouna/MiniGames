@@ -49,7 +49,7 @@ public class Menu_Window extends JFrame  implements ActionListener{
 		
 		btnGame_1_aim = new JButton("Aim Game");
 		btnGame_1_aim.setBounds(56, 118, 126, 143);
-		btnGame_1_aim.setIcon(new ImageIcon("C:\\Users\\20ala\\Downloads\\Logo+Mercadona+Web.png"));
+		btnGame_1_aim.setIcon(null);
 		contentPane.add(btnGame_1_aim);
 		btnGame_1_aim.addActionListener(this);
 		
@@ -78,7 +78,7 @@ public class Menu_Window extends JFrame  implements ActionListener{
 		
 		btnLogOut = new JButton("Log out");
 		btnLogOut.setBounds(25, 471, 85, 21);
-		contentPane.add(btnLogOut);
+		contentPane.add(btnLogOut);	
 		btnLogOut.addActionListener(this);
 		btnGame_2_math.addActionListener(this);
 	}
