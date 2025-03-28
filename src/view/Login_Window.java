@@ -6,7 +6,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import controlador.LoginControlador;
+import controlador.LoginControler;
 import model.Player;
 
 import javax.swing.JTextField;
@@ -27,7 +27,7 @@ public class Login_Window extends JFrame implements ActionListener {
 	private JPasswordField pwfpasswrd;
 	JButton btnLogIn = new JButton("Log In");
 	JButton btnSingUp = new JButton("Sign up");
-	private LoginControlador cont;
+	private LoginControler cont;
 	private JTextField textField;
 	private JLabel lblMSG = new JLabel("");
 	
@@ -35,7 +35,7 @@ public class Login_Window extends JFrame implements ActionListener {
 	 * Create the frame.
 	 */
 	
-	public Login_Window(LoginControlador controler) {
+	public Login_Window(LoginControler controler) {
 		setBackground(new Color(255, 255, 255));
 		setForeground(new Color(255, 255, 255));
 		setIconImage(Toolkit.getDefaultToolkit().getImage(Login_Window.class.getResource("/images/game-controller-icon-illustration-free-vector.jpg")));

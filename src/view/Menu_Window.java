@@ -8,7 +8,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import controlador.LoginControlador;
+import controlador.LoginControler;
 
 import javax.swing.JButton;
 import javax.swing.Icon;
@@ -23,12 +23,12 @@ import java.awt.Toolkit;
 public class Menu_Window extends JFrame  implements ActionListener{
 
 	private JPanel contentPane;
-	private LoginControlador cont;
+	private LoginControler cont;
 	private JButton btnGame_1_aim = new JButton("Aim Game");
 
 	private JButton btnERASEACC = new JButton("Erase Account");
 
-	public Menu_Window(LoginControlador controler) {
+	public Menu_Window(LoginControler controler) {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(Menu_Window.class.getResource("/images/game-controller-icon-illustration-free-vector.jpg")));
 		this.cont =controler;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

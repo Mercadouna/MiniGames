@@ -6,7 +6,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import controlador.LoginControlador;
+import controlador.LoginControler;
 import model.Player;
 
 import javax.swing.JTextField;
@@ -26,13 +26,13 @@ public class Register_Window extends JFrame implements ActionListener {
 	private JPanel contentPane;
 	private JPasswordField pwfpasswrd;
 	JButton btnSingUp = new JButton("Sign up");
-	private LoginControlador cont;
+	private LoginControler cont;
 	private JTextField textField;
 	private JLabel lblMSG;
 	/**
 	 * Create the frame.
 	 */
-	public Register_Window(LoginControlador controler) {
+	public Register_Window(LoginControler controler) {
 		this.cont=controler;
 		setTitle("Register_Minigames");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
