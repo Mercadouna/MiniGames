@@ -8,6 +8,8 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import controlador.LoginControler;
+
 public class Game_1_Window extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
@@ -15,20 +17,13 @@ public class Game_1_Window extends JDialog {
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
-		try {
-			Game_1_Window dialog = new Game_1_Window();
-			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-			dialog.setVisible(true);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+
 
 	/**
 	 * Create the dialog.
+	 * @param cont 
 	 */
-	public Game_1_Window() {
+	public Game_1_Window(LoginControler cont) {
 		setBounds(100, 100, 800, 500);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));

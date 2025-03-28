@@ -24,5 +24,7 @@ public class LoginControler {
 	public int obtpoints(Player player) {
 		return dao.obtpoints(player);
 	}
-	
+	public boolean modifiepoints(Player player) {
+		return dao.modifiepoints(player);
+	}
 }

@@ -109,7 +109,7 @@ public  class DBImplementation implements PlayerDAO{
 		}
 
 		@Override
-		public boolean modificarpuntos(Player player) {
+		public boolean modifiepoints(Player player) {
 			this.openConnection();
 			boolean yes=false;
 			int randpoint;
