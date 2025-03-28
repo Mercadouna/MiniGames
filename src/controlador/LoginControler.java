@@ -21,6 +21,8 @@ public class LoginControler {
 	public boolean checkPL(Player player) {
 		return dao.checkPL(player);
 	}
-	
+	public int obtpoints(Player player) {
+		return dao.obtpoints(player);
+	}
 	
 }

@@ -9,5 +9,5 @@ public interface PlayerDAO {
 	public boolean visualizarhist(Player player);
 	public void addplayer(Player player);
 	public boolean checkPL(Player player);
-
+	public int obtpoints(Player player);
 }

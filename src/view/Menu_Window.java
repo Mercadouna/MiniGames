@@ -9,6 +9,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import controlador.LoginControler;
+import model.Player;
 
 import javax.swing.JButton;
 import javax.swing.Icon;
@@ -28,7 +29,7 @@ public class Menu_Window extends JFrame  implements ActionListener{
 
 	private JButton btnERASEACC = new JButton("Erase Account");
 
-	public Menu_Window(LoginControler controler) {
+	public Menu_Window(LoginControler controler, Player j) {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(Menu_Window.class.getResource("/images/game-controller-icon-illustration-free-vector.jpg")));
 		this.cont =controler;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
