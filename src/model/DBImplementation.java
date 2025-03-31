@@ -37,7 +37,7 @@ public  class DBImplementation implements PlayerDAO{
 		final String SQLBORRAR = "DELETE FROM usuario WHERE nombre=?";
 		final String MODPOINTS = "UPDATE PLAYER SET POINTS = ? WHERE US_NAME = ?";
 		final String OBTAINPOINTS = "SELECT POINTS FORM PLAYER WHERE US_NAME = ?";
-
+		final String DELPL = "DELETE FROM player WHERE Us_Id = ?";
 
 		public DBImplementation() {
 			this.configFile = ResourceBundle.getBundle("configClase");
@@ -84,7 +84,7 @@ public  class DBImplementation implements PlayerDAO{
 			this.openConnection();
 			boolean yes=false;
 			try {
-				stmt = con.prepareCall("call DeletePlayer(?)"); 
+				stmt = con.prepareCall(DELPL); 
 				stmt.setInt(1, Integer.parseInt(ReturnID(player))); 
 				if(stmt.executeUpdate()>0) {
 					yes=true;
