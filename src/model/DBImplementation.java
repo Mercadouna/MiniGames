@@ -36,6 +36,7 @@ public  class DBImplementation implements PlayerDAO{
 	final String SQLBORRAR = "DELETE FROM usuario WHERE nombre=?";
 	final String MODPOINTS = "UPDATE PLAYER SET POINTS = ? WHERE US_NAME = ?";
 	final String OBTAINPOINTS = "SELECT POINTS FORM PLAYER WHERE US_NAME = ?";
+	final String DELPL = "DELETE FROM player WHERE US_NAME = ?";
 
 
 	public DBImplementation() {
@@ -79,21 +80,21 @@ public  class DBImplementation implements PlayerDAO{
 
 	
 	@Override
-	public boolean deleteplayer(Player player) {
+	public void deleteplayer(Player player) {
 		this.openConnection();
-		boolean yes=false;
 		try {
-			stmt.setInt(1, Integer.parseInt(ReturnID(player))); 
-			if(stmt.executeUpdate()>0) {
-				yes=true;
-			}
+			stmt = con.prepareCall(DELPL); 
+			stmt.setString(1, player.getName()); 
+			stmt.executeUpdate(); 
+
+			
 			stmt.close();
 			con.close();
 		} catch (SQLException e) {
 			System.out.println("Error al eliminar al jugador: " + e.getMessage());
 			e.printStackTrace();
 		}
-		return yes;
+
 	}
 	
 
@@ -194,23 +195,23 @@ public  class DBImplementation implements PlayerDAO{
 
 
 	public String ReturnID(Player player) {
-	    this.openConnection();
-	    String id = "";
-	    try {
-	        PreparedStatement stm = con.prepareStatement("SELECT Us_Id FROM PLAYER WHERE US_NAME = ? AND PASS = ?");
-	        stm.setString(1, player.getName());
-	        stm.setString(2, player.getPassword());
-	        ResultSet rs = stm.executeQuery();
-	        if (rs.next()) {
-	            id = rs.getString("Us_Id");
-	        }
-	        rs.close();
-	        stm.close();
-	        con.close();
-	    } catch (SQLException e) {
-	        e.printStackTrace();
-	    }
-	    return id;
+		this.openConnection();
+		String id = "";
+		try {
+			PreparedStatement stm = con.prepareStatement("SELECT Us_Id FROM PLAYER WHERE US_NAME = ? AND PASS = ?");
+			stm.setString(1, player.getName());
+			stm.setString(2, player.getPassword());
+			ResultSet rs = stm.executeQuery();
+			if (rs.next()) {
+				id = rs.getString("Us_Id");
+			}
+			rs.close();
+			stm.close();
+			con.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return id;
 	}
 
 

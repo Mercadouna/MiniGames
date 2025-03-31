@@ -28,7 +28,7 @@ public class LoginControler {
 	public void modifypoints(Player player) {
 		dao.modifypoints(player);
 	}
-	public boolean deletePlayer(Player player){	
-		return dao.deleteplayer(player);
+	public void deletePlayer(Player player){	
+		 dao.deleteplayer(player);
 	}
 }
