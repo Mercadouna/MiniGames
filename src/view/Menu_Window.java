@@ -4,13 +4,13 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.border.*;
-import controlador.LoginControlador;
+import controlador.LoginControler;
 import model.Player;
 
 public class Menu_Window extends JFrame implements ActionListener {
     
     private JPanel contentPane;
-    private LoginControlador cont;
+    private LoginControler cont;
     private Player j;
     
     private JButton btnGame_1_aim, btnGame_2_math, btnTrophyRoom, btnRecord, btnDelete, btnLogOut;
@@ -30,7 +30,7 @@ public class Menu_Window extends JFrame implements ActionListener {
     private ImageIcon userIcon = new ImageIcon(getClass().getResource("/images/user.png"));
     private ImageIcon logoutIcon = new ImageIcon(getClass().getResource("/images/logout.png"));
 
-    public Menu_Window(LoginControlador controler, Player j) {
+    public Menu_Window(LoginControler controler, Player j) {
         this.cont = controler;
         this.j = j;
         
@@ -143,7 +143,7 @@ public class Menu_Window extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == btnGame_1_aim) {
             j.setPoints(cont.obtpoints(j));
-            cont.modificarpuntos(j);
+            cont.modifypoints(j);
             Game_1_Window g1 = new Game_1_Window(this.cont);
             g1.setVisible(true);
         }
@@ -160,6 +160,13 @@ public class Menu_Window extends JFrame implements ActionListener {
                 loginWindow.setVisible(true);
                 this.dispose();
             }
+        }
+        else if(e.getSource()==btnDelete) {
+        	if(cont.deletePlayer(j)) {
+        		Login_Window loginWindow = new Login_Window(cont);
+                loginWindow.setVisible(true);
+                this.dispose();
+        	}
         }
         // Aquí puedes agregar las acciones para los demás botones
     }

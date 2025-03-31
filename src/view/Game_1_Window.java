@@ -12,7 +12,7 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import controlador.LoginControlador;
+import controlador.LoginControler;
 import javax.swing.JLabel;
 import java.awt.Font;
 import java.awt.Color;
@@ -23,7 +23,7 @@ public class Game_1_Window extends JDialog {
 
     private final JPanel contentPanel = new JPanel();
 
-    public Game_1_Window(LoginControlador cont) {
+    public Game_1_Window(LoginControler cont) {
         setBounds(100, 100, 800, 500);
         getContentPane().setLayout(null);
         contentPanel.setBounds(0, 0, 800, 500);

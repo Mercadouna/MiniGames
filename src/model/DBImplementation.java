@@ -11,7 +11,7 @@ import java.util.Random;
 import java.util.ResourceBundle;
 import java.util.TreeMap;
 
-public  class ImplementationBD implements PlayerDAO{
+public  class DBImplementation implements PlayerDAO{
 	// Atributos
 	private Connection con;
 	private PreparedStatement stmt;
@@ -38,7 +38,7 @@ public  class ImplementationBD implements PlayerDAO{
 	final String OBTAINPOINTS = "SELECT POINTS FORM PLAYER WHERE US_NAME = ?";
 
 
-	public ImplementationBD() {
+	public DBImplementation() {
 		this.configFile = ResourceBundle.getBundle("configClase");
 		this.driverBD = this.configFile.getString("Driver");
 		this.urlBD = this.configFile.getString("Conn");
@@ -79,19 +79,22 @@ public  class ImplementationBD implements PlayerDAO{
 
 	
 	@Override
-		public void deleteplayer(Player player) {
-		    this.openConnection();
-		    try {
-		        stmt = con.prepareCall("call DeletePlayer(?)"); 
-		        stmt.setInt(1, Integer.parseInt(ReturnID(player))); 
-		        stmt.executeUpdate();
-		        stmt.close();
-		        con.close();
-		    } catch (SQLException e) {
-		        System.out.println("Error al eliminar al jugador: " + e.getMessage());
-		        e.printStackTrace();
-		    }
+	public boolean deleteplayer(Player player) {
+		this.openConnection();
+		boolean yes=false;
+		try {
+			stmt.setInt(1, Integer.parseInt(ReturnID(player))); 
+			if(stmt.executeUpdate()>0) {
+				yes=true;
+			}
+			stmt.close();
+			con.close();
+		} catch (SQLException e) {
+			System.out.println("Error al eliminar al jugador: " + e.getMessage());
+			e.printStackTrace();
 		}
+		return yes;
+	}
 	
 
 
@@ -104,7 +107,7 @@ public  class ImplementationBD implements PlayerDAO{
 	}
 	
 	@Override
-	public void modificarpuntos(Player player) {
+	public void modifypoints(Player player) {
 	    this.openConnection();
 	    int randpoint;
 	    randpoint =  RandomPoints();
@@ -258,6 +261,11 @@ public  class ImplementationBD implements PlayerDAO{
         return existe;
 	} */
 
+
+
+
+	}
+
 	/*       @Override
 		public boolean insertarUsuario(Usuario usuario) {
 			// TODO Auto-generated method stub
@@ -366,4 +374,4 @@ public  class ImplementationBD implements PlayerDAO{
 
 		} */
 
-}
+

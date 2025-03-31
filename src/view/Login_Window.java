@@ -9,7 +9,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import controlador.LoginControlador;
+import controlador.LoginControler;
 import model.Player;
 
 import javax.swing.JTextField;
@@ -32,14 +32,14 @@ public class Login_Window extends JFrame implements ActionListener {
     private JPasswordField pwfpasswrd;
     JButton btnLogIn = new JButton("Login");
     JButton btnSingUp = new JButton("Sign Up");
-    private LoginControlador cont;
+    private LoginControler cont;
     private JTextField textField;
     private JLabel lblErrorMessage; // Etiqueta para el mensaje de error
 
     /**
      * Create the frame.
      */
-    public Login_Window(LoginControlador controler) {
+    public Login_Window(LoginControler controler) {
         this.cont = controler;
         setTitle("Login");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
