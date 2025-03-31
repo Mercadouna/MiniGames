@@ -13,20 +13,16 @@ public class Menu_Window extends JFrame implements ActionListener {
     private LoginControlador cont;
     private Player j;
     
-    // Componentes
     private JButton btnGame_1_aim, btnGame_2_math, btnTrophyRoom, btnRecord, btnDelete, btnLogOut;
     
-    // Fuentes
     private Font titleFont = new Font("Segoe UI", Font.BOLD, 24);
     private Font buttonFont = new Font("Segoe UI", Font.PLAIN, 16);
     
-    // Colores
     private Color darkPurple = new Color(48, 25, 52);
     private Color mediumPurple = new Color(102, 51, 153);
     private Color lightPurple = new Color(204, 153, 255);
     private Color textColor = new Color(240, 240, 240);
     
-    // Imágenes (debes tener estas imágenes en tu proyecto)
     private ImageIcon aimIcon = new ImageIcon(getClass().getResource("/images/aim.png"));
     private ImageIcon mathIcon = new ImageIcon(getClass().getResource("/images/math.png"));
     private ImageIcon trophyIcon = new ImageIcon(getClass().getResource("/images/trophy.png"));
