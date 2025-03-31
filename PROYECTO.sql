@@ -97,7 +97,7 @@ Delimiter //
 create procedure InsertPlayer(us_name varchar(50), us_password varchar(50))
 begin 
 declare Id_user int;
-if not exists(select * from Player where US_NAME=us_name and PASS=us_password) then 
+if exists(select * from Player where US_NAME=us_name) then 
 select max(Us_Id) + 1 into Id_user from Player;
 insert into Player values(Id_user, us_name, 0, us_password);
 select "Successfully created";
