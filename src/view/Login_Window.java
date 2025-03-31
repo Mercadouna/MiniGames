@@ -136,5 +136,6 @@ public class Login_Window extends JFrame implements ActionListener {
             mw.setVisible(true);
             this.dispose();
         }
+
     }
 }
