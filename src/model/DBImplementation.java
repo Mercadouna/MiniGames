@@ -36,7 +36,7 @@ public  class DBImplementation implements PlayerDAO{
 	final String SQLBORRAR = "DELETE FROM usuario WHERE nombre=?";
 	final String MODPOINTS = "UPDATE PLAYER SET POINTS = ? WHERE US_NAME = ?";
 	final String OBTAINPOINTS = "SELECT POINTS FORM PLAYER WHERE US_NAME = ?";
-	final String DELPL = "DELETE FROM player WHERE US_NAME = ?";
+	final String DELPL = "DELETE PLAYER FROM PLAYER WHERE US_NAME = ?";
 
 
 	public DBImplementation() {
@@ -83,6 +83,7 @@ public  class DBImplementation implements PlayerDAO{
 	public void deleteplayer(Player player) {
 		this.openConnection();
 		try {
+			this.openConnection();
 			stmt = con.prepareCall(DELPL); 
 			stmt.setString(1, player.getName()); 
 			stmt.executeUpdate(); 
