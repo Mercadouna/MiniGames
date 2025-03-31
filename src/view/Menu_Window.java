@@ -165,6 +165,13 @@ public class Menu_Window extends JFrame implements ActionListener {
                 this.dispose();
             }
         }
+        else if(e.getSource()==btnDelete) {
+        	if(cont.deletePlayer(j)) {
+        		Login_Window loginWindow = new Login_Window(cont);
+                loginWindow.setVisible(true);
+                this.dispose();
+        	}
+        }
         // Aquí puedes agregar las acciones para los demás botones
     }
 }
