@@ -1,9 +1,13 @@
+
 package controlador;
 
 
 
+import java.util.ArrayList;
+
 import model.Player;
 import model.PlayerDAO;
+import model.Plays;
 import view.Login_Window;
 
 public class LoginControler {
@@ -24,10 +28,14 @@ public class LoginControler {
 	public int obtpoints(Player player) {
 		return dao.obtpoints(player);
 	}
-	public boolean modifiepoints(Player player) {
-		return dao.modifiepoints(player);
+	public void modifypoints(Player player, String gname) {
+		dao.modifypoints(player, gname);
 	}
-	public boolean deletePlayer(Player player){	
-		return dao.deleteplayer(player);
+	public void deletePlayer(Player player){	
+		 dao.deleteplayer(player);
 	}
+	public ArrayList<Plays> getPlays(Player player){
+		return dao.getPlays(player);
+	}
+
 }

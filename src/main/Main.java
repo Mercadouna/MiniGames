@@ -8,7 +8,8 @@ public class Main {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		LoginControler controler= new LoginControler();
-		controler.show_window();
+		Login_Window frame = new Login_Window(controler);
+		frame.setVisible(true);
 	}
 
 }

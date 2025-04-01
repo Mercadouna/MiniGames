@@ -13,20 +13,16 @@ public class Menu_Window extends JFrame implements ActionListener {
     private LoginControler cont;
     private Player j;
     
-    // Componentes
     private JButton btnGame_1_aim, btnGame_2_math, btnTrophyRoom, btnRecord, btnDelete, btnLogOut;
     
-    // Fuentes
     private Font titleFont = new Font("Segoe UI", Font.BOLD, 24);
     private Font buttonFont = new Font("Segoe UI", Font.PLAIN, 16);
     
-    // Colores
     private Color darkPurple = new Color(48, 25, 52);
     private Color mediumPurple = new Color(102, 51, 153);
     private Color lightPurple = new Color(204, 153, 255);
     private Color textColor = new Color(240, 240, 240);
     
-    // Imágenes (debes tener estas imágenes en tu proyecto)
     private ImageIcon aimIcon = new ImageIcon(getClass().getResource("/images/aim.png"));
     private ImageIcon mathIcon = new ImageIcon(getClass().getResource("/images/math.png"));
     private ImageIcon trophyIcon = new ImageIcon(getClass().getResource("/images/trophy.png"));
@@ -146,9 +142,10 @@ public class Menu_Window extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == btnGame_1_aim) {
-            j.setPoints(cont.obtpoints(j));
-            cont.modifiepoints(j);
-            Game_1_Window g1 = new Game_1_Window(cont);
+        	int sc =cont.obtpoints(j);
+            j.setPoints(sc);
+            cont.modifypoints(j, "AIM");
+            Game_1_Window g1 = new Game_1_Window(this.cont);
             g1.setVisible(true);
         }
         else if(e.getSource() == btnLogOut) {
@@ -166,11 +163,15 @@ public class Menu_Window extends JFrame implements ActionListener {
             }
         }
         else if(e.getSource()==btnDelete) {
-        	if(cont.deletePlayer(j)) {
+        	cont.deletePlayer(j);
         		Login_Window loginWindow = new Login_Window(cont);
                 loginWindow.setVisible(true);
                 this.dispose();
-        	}
+        	
+        }else if(e.getSource()==btnRecord) {
+        	Stats_plays_Window spw= new Stats_plays_Window(cont, j);
+        	spw.setVisible(true);
+        	this.dispose();
         }
         // Aquí puedes agregar las acciones para los demás botones
     }
