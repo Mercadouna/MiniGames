@@ -109,7 +109,9 @@ public class Menu_Window extends JFrame implements ActionListener {
         btnLogOut.addActionListener(this);
     }
     
-    private JButton createButton(String text, ImageIcon icon) {
+    
+
+	private JButton createButton(String text, ImageIcon icon) {
         JButton button = new JButton(text, icon);
         button.setFont(buttonFont);
         button.setForeground(textColor);
@@ -167,6 +169,11 @@ public class Menu_Window extends JFrame implements ActionListener {
                 loginWindow.setVisible(true);
                 this.dispose();
         	
+        }
+        else if (e.getSource() == btnTrophyRoom) {
+            Trophy_Window trophyWindow = new Trophy_Window(j, cont);
+            trophyWindow.setVisible(true);
+            this.dispose();
         }
         // Aquí puedes agregar las acciones para los demás botones
     }
