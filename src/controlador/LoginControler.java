@@ -3,8 +3,10 @@ package controlador;
 
 
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 
+import model.InsufficientPointsException;
 import model.Player;
 import model.PlayerDAO;
 import model.Plays;
@@ -37,5 +39,16 @@ public class LoginControler {
 	public ArrayList<Plays> getPlays(Player player){
 		return dao.getPlays(player);
 	}
-
+    public ArrayList<String> getBoughtTrophies(Player player) { 
+        return dao.getBoughtTrophies(Integer.parseInt(dao.ReturnID(player)));
+    }
+	   public boolean buyTrophy(Player player, String trophyName, int trophyPrice) throws InsufficientPointsException {
+	        try {
+	            return dao.buyTrophy(player, trophyName, trophyPrice);
+	        } catch (SQLException e) {
+	            System.err.println("Error de base de datos al intentar comprar trofeo '" + trophyName + "': " + e.getMessage());
+	            
+	            return false; 
+	        }
+	    }
 }

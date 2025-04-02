@@ -13,6 +13,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
@@ -77,7 +78,7 @@ public class Stats_plays_Window extends JFrame {
                 g2d.fillRect(0, 0, getWidth(), getHeight());
             }
         };
-
+        
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 20, 0));
@@ -88,8 +89,15 @@ public class Stats_plays_Window extends JFrame {
 		contentPane.add(bottomPanel, BorderLayout.SOUTH);
 		
 		JList list = new JList(cont.getPlays(j).toArray());
-		list.setBounds(32, 33, 420, 390);
-		contentPane.add(list);
+		JScrollPane scrollPane = new JScrollPane(list);
+
+	    scrollPane.setBounds(32, 33, 489, 517);
+
+	    contentPane.add(scrollPane);
+
+        
+        
+		
 	}
 	private JButton createButton(String text, ImageIcon icon) {
         JButton button = new JButton(text, icon);

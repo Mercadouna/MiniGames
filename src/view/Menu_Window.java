@@ -179,6 +179,10 @@ public class Menu_Window extends JFrame implements ActionListener {
         	Stats_plays_Window spw= new Stats_plays_Window(cont, j);
         	spw.setVisible(true);
         	this.dispose();
+        }        else if (e.getSource() == btnTrophyRoom) {
+            Trophy_Window trophyWindow = new Trophy_Window(j, cont);
+            trophyWindow.setVisible(true);
+            this.dispose();
         }
         // Aquí puedes agregar las acciones para los demás botones
     }

@@ -1,5 +1,6 @@
 package model;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public interface PlayerDAO {
@@ -13,5 +14,10 @@ public interface PlayerDAO {
 	public int RandomPoints();
 	public int obtpoints(Player player);
 	public void modifypoints(Player player, String gname);
+	public String ReturnID(Player player);
 	public ArrayList<Plays> getPlays(Player player);
+	public ArrayList<String> getBoughtTrophies(int userId);
+	public boolean buyTrophy(Player player, String trophyName, int trophyPrice)
+			throws InsufficientPointsException, SQLException;
+	
 } 
