@@ -148,6 +148,13 @@ public class Menu_Window extends JFrame implements ActionListener {
             Game_1_Window g1 = new Game_1_Window(this.cont);
             g1.setVisible(true);
         }
+        else if(e.getSource() == btnGame_2_math) {
+        	int sc =cont.obtpoints(j);
+            j.setPoints(sc);
+            cont.modifypoints(j, "ARITMETICS");
+            Game_2_Window g1 = new Game_2_Window(this.cont);
+            g1.setVisible(true);
+        }
         else if(e.getSource() == btnLogOut) {
             int option = JOptionPane.showConfirmDialog(
                 this, 
