@@ -13,9 +13,10 @@ public interface PlayerDAO {
 	public boolean checkPL(Player player);
 	public int RandomPoints();
 	public int obtpoints(Player player);
-	public void modifypoints(Player player);
+	public void modifypoints(Player player, String gname);
 	public ArrayList<String> getBoughtTrophies(int userId);
 	public boolean buyTrophy(Player player, String trophyName, int trophyPrice)
 			throws InsufficientPointsException, SQLException;
+	public ArrayList<Plays> getPlays(Player player);
 	}
  

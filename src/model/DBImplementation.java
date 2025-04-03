@@ -44,6 +44,8 @@ public  class DBImplementation implements PlayerDAO{
     final String UPDATE_POINTS = "UPDATE PLAYER SET POINTS = POINTS - ? WHERE Us_Id = ?";
     final String INSERT_BUY = "INSERT INTO BUY (Us_Id, T_NAME) VALUES (?, ?)";
     final String GET_ID_BY_NAME = "SELECT Us_Id FROM PLAYER WHERE US_NAME = ?"; 
+    private final String GETPLAYS = "SELECT * FROM PLAYS WHERE Us_Id = ?";
+	private final String SAVEPLAYS = "INSERT INTO PLAYS(Us_ID, G_Name, DATI, SCORE) VALUES (?, ?, CURDATE(), ?)";
 
 
 	public DBImplementation() {
@@ -138,10 +140,12 @@ public  class DBImplementation implements PlayerDAO{
 	}
 	
 	@Override
-	public void modifypoints(Player player) {
-	    this.openConnection();
-	    int randpoint;
+	public void modifypoints(Player player, String gname) {
+		int randpoint;
 	    randpoint =  RandomPoints();
+	    recordPlay( player, gname,randpoint);
+		this.openConnection();
+	    
 	    try {
 	        PreparedStatement stm = con.prepareStatement(MODPOINTS);
 	        stm.setInt(1, player.getPoints()+randpoint);
@@ -154,6 +158,7 @@ public  class DBImplementation implements PlayerDAO{
 	    }
 
 	}
+
 
 
 	@Override
@@ -385,6 +390,56 @@ public  class DBImplementation implements PlayerDAO{
 
         return purchaseSuccessful;
     }
+	
+	
+	
+	@Override
+	public ArrayList getPlays(Player player) {
+		ArrayList<Plays> plays= new ArrayList<Plays>(); 
+		this.openConnection();
+		try {
+			stmt = con.prepareStatement(GETPLAYS);
+			stmt.setString(1, ReturnID(player));
+			ResultSet retrievedPlays = stmt.executeQuery();
+			while (retrievedPlays.next()) {
+				Plays p=new Plays(
+						retrievedPlays.getString("G_NAME"),
+						retrievedPlays.getDate("DATI").toLocalDate(),
+						retrievedPlays.getInt("SCORE")
+						);
+				plays.add(p);
+			}
+			retrievedPlays.close();
+			stmt.close();
+			con.close();
+		} catch (SQLException e) {
+			System.out.println("Error al verificar credenciales: " + e.getMessage());
+		}
+		return plays;
+	}
+
+
+
+
+	public void recordPlay(Player player, String gname, int score) {
+		// TODO Auto-generated method stub
+		this.openConnection();
+		try {
+			stmt=con.prepareStatement(SAVEPLAYS);
+			stmt.setString(1, ReturnID(player));
+			stmt.setString(2, gname);
+			stmt.setInt(3, score);
+			stmt.executeUpdate();
+		}catch (SQLException e) {
+			System.out.println("Error al verificar credenciales: " + e.getMessage());
+		}
+		
+	}
+
+
+
+
+	
 	
 	/*public boolean comprobarUsuario(Usuario usuario){
 		// Abrimos la conexion

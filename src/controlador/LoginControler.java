@@ -3,6 +3,7 @@ package controlador;
 import model.DBImplementation;
 import model.InsufficientPointsException;
 import model.Player;
+import model.Plays;
 
 import java.sql.SQLException;
 import java.util.ArrayList; 
@@ -30,8 +31,8 @@ public class LoginControler {
         return dao.obtpoints(player);
     }
 
-    public void modifypoints(Player player) {
-        dao.modifypoints(player);
+    public void modifypoints(Player player, String gname) {
+        dao.modifypoints(player, gname);
     }
 
     public void deletePlayer(Player player) {
@@ -50,4 +51,7 @@ public class LoginControler {
             return false; 
         }
     }
+    public ArrayList<Plays> getPlays(Player player){	
+		return dao.getPlays(player);
+	}
 }
