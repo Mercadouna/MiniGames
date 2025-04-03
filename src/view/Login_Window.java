@@ -125,7 +125,7 @@ public class Login_Window extends JFrame implements ActionListener {
             if (cont.compareplayer(j) == true) {
                 Menu_Window mw = new Menu_Window(this.cont, j);
                 mw.setVisible(true);
-                this.dispose();
+                this.dispose(); 
             } else {
                 lblErrorMessage.setText("Incorrect player or password"); // Mostrar mensaje de error
             }

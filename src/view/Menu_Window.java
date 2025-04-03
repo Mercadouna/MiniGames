@@ -170,12 +170,33 @@ public class Menu_Window extends JFrame implements ActionListener {
 			this.dispose();
 
 		}
-		else if (e.getSource() == btnTrophyRoom) {
-			Trophy_Window trophyWindow = new Trophy_Window(j, cont);
-			trophyWindow.setVisible(true);
-			this.dispose();
+		 else if (e.getSource() == btnTrophyRoom) {
+		        // --- !!! INICIO DE LA CORRECCIÓN !!! ---
+		try {
+            // 1. Obtener los puntos MÁS ACTUALES de la base de datos
+            int puntosActualizados = cont.obtpoints(j);
 
-		}
+            // 2. Actualizar el objeto 'j' LOCAL con esos puntos
+            j.setPoints(puntosActualizados);
+
+            System.out.println("Puntos actualizados en Menu_Window antes de ir a Trofeos: " + j.getPoints()); // Para depuración
+
+        } catch (Exception ex) {
+            // Manejar posible error al obtener puntos (opcional, pero recomendado)
+            System.err.println("Error al obtener los puntos más recientes antes de abrir Trophy_Window: " + ex.getMessage());
+            // Podrías mostrar un JOptionPane de error aquí si quieres
+            // JOptionPane.showMessageDialog(this, "Error al cargar puntos actualizados.", "Error", JOptionPane.ERROR_MESSAGE);
+            // Decidir si continuar con los puntos posiblemente desactualizados o no hacer nada
+        }
+        // --- !!! FIN DE LA CORRECCIÓN !!! ---
+
+        // 3. Crear y mostrar Trophy_Window CON EL OBJETO 'j' YA ACTUALIZADO
+        Trophy_Window trophyWindow = new Trophy_Window(j, cont);
+        // trophyWindow.setLocationRelativeTo(this); // Ya lo hace el constructor si usas setLocationRelativeTo(null)
+        trophyWindow.setVisible(true);
+        this.dispose(); // Cerrar la ventana actual del menú
+
+	}
 		else if(e.getSource()==btnRecord) {
 			Stats_plays_Window spw= new Stats_plays_Window(cont, j);
 			spw.setVisible(true);
