@@ -135,7 +135,7 @@ public class Stats_plays_Window extends JFrame implements ActionListener {
 
         // Añadir el scrollPane al CENTRO
         contentPane.add(scrollPane, BorderLayout.CENTER);
-
+ 
 
         // --- Panel Inferior y Botón ---
         JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
