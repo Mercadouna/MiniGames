@@ -87,7 +87,7 @@ public class Stats_plays_Window extends JFrame {
 		btnGoB=createButton("Go Back", HomeIcon);
 		bottomPanel.add(btnGoB);
 		contentPane.add(bottomPanel, BorderLayout.SOUTH);
-		
+		 
 		JList list = new JList(cont.getPlays(j).toArray());
 		list.setFont(new Font("OCR A Extended", Font.PLAIN, 17));
 		JScrollPane scrollPane = new JScrollPane(list);
