@@ -89,6 +89,7 @@ public class Stats_plays_Window extends JFrame {
 		contentPane.add(bottomPanel, BorderLayout.SOUTH);
 		
 		JList list = new JList(cont.getPlays(j).toArray());
+		list.setFont(new Font("OCR A Extended", Font.PLAIN, 17));
 		JScrollPane scrollPane = new JScrollPane(list);
 
 	    scrollPane.setBounds(32, 33, 489, 517);
