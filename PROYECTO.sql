@@ -64,7 +64,7 @@
  (3, 'AIM', '2025-01-05', 30);
  
  -- Creation of different procedures and functions.
- /*DELIMITER //
+ DELIMITER //
  create procedure MostrarPlayer1()
  begin
  DECLARE id_user INT;
@@ -92,7 +92,7 @@
  DELIMITER ;
  -- to call the procedure
  call MostrarPlayer1(); 
- --  drop procedure MostrarPlayer;*/
+ --  drop procedure MostrarPlayer;
  
  
  
@@ -168,8 +168,14 @@
  begin
  declare id_us int;
  declare return_text varchar(50);
+ declare fin boolean default false;
+DECLARE CONTINUE HANDLER FOR NOT FOUND SET fin = TRUE; 
  select Us_Id into id_us from PLAYER where US_NAME=nom_us and PASS=password_us;
- select concat('The player ',nom_us , ' have this id: ',id_us) into return_text;
+ if fin then
+select concat('Error: No user found with name "', nom_us, '" and the given password.') into return_text;
+else
+select concat('The player ',nom_us , ' have this id: ',id_us) into return_text;
+ end if ;
  return return_text;
  end //
  Delimiter ;
@@ -198,6 +204,7 @@
  begin
  declare name_us, paswword_us, return_text varchar(50);
  declare points_us int;
+ 
  select US_NAME into name_us from player where Us_Id=id_us;
  select PASS into paswword_us from player where Us_Id=id_us;
  select POINTS into points_us from player where Us_Id=id_us;
