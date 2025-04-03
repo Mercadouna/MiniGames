@@ -94,7 +94,7 @@ public class Stats_plays_Window extends JFrame implements ActionListener {
         lblWindowTitle.setHorizontalAlignment(SwingConstants.CENTER);
         contentPane.add(lblWindowTitle, BorderLayout.NORTH);
 
-
+ 
         // --- Lista de Estadísticas ---
         DefaultListModel<Plays> listModel = new DefaultListModel<>(); // <<<--- Usar DefaultListModel<Plays>
         JList<Plays> list = new JList<>(listModel); // <<<--- Crear JList con el Model
