@@ -104,7 +104,7 @@ public class Stats_plays_Window extends JFrame implements ActionListener {
         list.setSelectionBackground(mediumPurple);
         list.setSelectionForeground(textColor);
         // list.setCellRenderer(...); // Podrías usar un CellRenderer personalizado para mejor formato
-
+ 
         // --- Cargar datos en el modelo ---
         try {
             ArrayList<Plays> playsData = cont.getPlays(j); // Llama al controlador
