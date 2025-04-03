@@ -34,7 +34,6 @@ public class Menu_Window extends JFrame implements ActionListener {
         this.cont = controler;
         this.j = j;
         
-        // Configuración básica de la ventana
         setTitle("Game Center - " + j.getName());
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(800, 600);
