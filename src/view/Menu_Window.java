@@ -258,10 +258,20 @@ public class Menu_Window extends JFrame implements ActionListener {
             Game_1_Window g1 = new Game_1_Window(this.cont, this.j);
             g1.setLocationRelativeTo(this); // Centrar respecto al menú
             g1.setVisible(true); // Es modal, bloqueará esta ventana
+        }
+        else if(e.getSource() == btnGame_2_math) {
+            // --- !!! INICIO CORRECCIÓN !!! ---
+            // Eliminar estas líneas:
+            // int sc =cont.obtpoints(j);
+            // j.setPoints(sc);
+            // cont.modifypoints(j, "ARITMETICS");
 
-        } else if (source == btnGame_2_math) {
-            JOptionPane.showMessageDialog(this, "Juego de Matemáticas - ¡No implementado!", "Próximamente", JOptionPane.INFORMATION_MESSAGE);
-
+            // Simplemente abrir la ventana Game_2_Window:
+            System.out.println("Abriendo Math Game para: " + j.getName());
+            Game_2_Window g2 = new Game_2_Window(this.cont, this.j); // Asegúrate de pasar 'j'
+            g2.setLocationRelativeTo(this); // Centrar
+            g2.setVisible(true); // Hacer visible (debería ser modal)
+           // --- !!! FIN CORRECCIÓN !!! ---
         } else if (source == btnTrophyRoom) {
             // --- Actualizar puntos ANTES de abrir TrophyWindow ---
             try {

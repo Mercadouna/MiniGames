@@ -60,12 +60,33 @@ public class LoginControler {
 		    }
 		}
 	   public void savePlayResult(Player player, String gameName, int score) {
-		    try {
-		        // Llama al método corregido del DAO
-		        dao.recordPlay(player, gameName, score);
-		    } catch (SQLException e) {
-		        System.err.println("Error de Controlador al guardar resultado de partida: " + e.getMessage());
-		        // Aquí podrías añadir logging o una forma de notificar el error si es necesario
-		    }
-		}
+	        // Validación básica de parámetros (opcional pero recomendable)
+	        if (player == null || gameName == null || gameName.trim().isEmpty()) {
+	            System.err.println("Error en savePlayResult: Datos de entrada inválidos (jugador o nombre de juego nulos/vacíos).");
+	            return; // No intentar guardar si falta información esencial
+	        }
+	        if (dao == null) {
+	             System.err.println("Error crítico en savePlayResult: El objeto DAO no está inicializado.");
+	             return; // No se puede continuar sin DAO
+	        }
+
+	        try {
+	            // Llama al método correspondiente en la instancia del DAO (dao)
+	            // Este método dao.recordPlay es el que debe estar corregido (manejo de ID y conexión)
+	            System.out.println("Controlador: Llamando a dao.recordPlay para Jugador ID (obtenido en DAO): "
+	                               + player.getName() + ", Juego: " + gameName + ", Score: " + score); // Mensaje Debug
+	            dao.recordPlay(player, gameName, score);
+
+	        } catch (SQLException e) {
+
+	            System.err.println("Error de Controlador al intentar guardar resultado de partida para "
+	                               + player.getName() + ". SQLException: " + e.getMessage());
+	
+
+	        } catch (Exception ex) {
+	            // Capturar cualquier otra excepción inesperada para que no detenga la aplicación
+	             System.err.println("Error inesperado en savePlayResult para " + player.getName() + ": " + ex.getMessage());
+	             ex.printStackTrace(); // Imprimir traza completa para errores inesperados
+	        }
+	    }
 }

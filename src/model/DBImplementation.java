@@ -313,46 +313,60 @@ public  class DBImplementation implements PlayerDAO{
 
 
 
-	@Override // Añadir @Override si está en la interfaz PlayerDAO
-	public void recordPlay(Player player, String gname, int score) throws SQLException { // Añadir throws SQLException
+	// Dentro de DBImplementation.java
+
+	@Override // Asegúrate que la interfaz PlayerDAO tiene esta firma
+	public void recordPlay(Player player, String gname, int score) throws SQLException {
 	    int playerId = -1;
-	    // --- Obtener playerId de forma segura (NECESITA MEJORA URGENTE en ReturnID/gestión de ID) ---
-	    try {
-	        String idStr = this.ReturnID(player); // Sigue usando el método problemático
-	        if (idStr != null && !idStr.isEmpty()) {
-	            playerId = Integer.parseInt(idStr);
-	        } else {
-	            // Lanzar excepción si no podemos obtener el ID es más robusto
-	            throw new SQLException("recordPlay: No se pudo obtener el ID del jugador para " + player.getName());
-	        }
-	    } catch (NumberFormatException e) {
-	        throw new SQLException("recordPlay: Fallo al convertir el ID a número desde ReturnID para " + player.getName() + ". ReturnID devolvió: '" + this.ReturnID(player) + "'", e);
-	    } catch (Exception e) { // Captura otros errores de ReturnID
-	        throw new SQLException("recordPlay: Error llamando a ReturnID para " + player.getName(), e);
-	    }
+
+	    // --- OBTENER ID USANDO GET_ID_BY_NAME (MÁS FIABLE QUE ReturnID) ---
+	    // Aún así, lo ideal es tener el ID en el objeto Player desde el login.
+	    String getIdSql = GET_ID_BY_NAME; // "SELECT Us_Id FROM PLAYER WHERE US_NAME = ?"
+	    try (Connection idCon = DriverManager.getConnection(urlBD, userBD, passwordBD);
+	         PreparedStatement idStmt = idCon.prepareStatement(getIdSql)) {
+
+	        idStmt.setString(1, player.getName()); // Busca por nombre, no contraseña
+	        try (ResultSet idRs = idStmt.executeQuery()) {
+	            if (idRs.next()) {
+	                playerId = idRs.getInt("Us_Id"); // Obtiene el INT directamente
+	            } else {
+	                // Lanzar excepción si no podemos encontrar el ID por nombre
+	                throw new SQLException("recordPlay: No se pudo encontrar el ID del jugador para el nombre: " + player.getName());
+	            }
+	        } // idRs se cierra solo
+	    } catch (SQLException e) {
+	        // Log and re-throw or handle more gracefully
+	        System.err.println("recordPlay: Error SQL al obtener ID para " + player.getName() + ": " + e.getMessage());
+	        throw e; // Re-throw para notificar al controlador
+	    } // idStmt y idCon se cierran automáticamente
 	    // --- Fin obtención ID ---
 
-	    String sql = SAVEPLAYS;
-	    System.out.println("Guardando partida: Jugador ID=" + playerId + ", Juego=" + gname + ", Score=" + score); // Mensaje Debug
+	    if (playerId <= 0) { // Comprobación extra por si acaso
+	        throw new SQLException("recordPlay: ID de jugador inválido obtenido: " + playerId);
+	    }
 
-	    // Usar Try-with-Resources para conexión y statement
+	    // --- Ahora, ejecutar el INSERT con el ID correcto ---
+	    String sql = SAVEPLAYS; // "INSERT INTO PLAYS(Us_ID, G_Name, DATI, SCORE) VALUES (?, ?, CURDATE(), ?)";
+	    System.out.println("Guardando partida: Jugador ID=" + playerId + ", Juego=" + gname + ", Score=" + score); // Debug
+
+	    // Usar Try-with-Resources para la conexión y el statement del INSERT
 	    try (Connection tempCon = DriverManager.getConnection(urlBD, userBD, passwordBD);
 	         PreparedStatement tempStmt = tempCon.prepareStatement(sql)) {
 
-	        tempStmt.setInt(1, playerId);    // <<<--- CORRECCIÓN: Usar setInt
+	        tempStmt.setInt(1, playerId);    // <<<--- Usar setInt con el ID correcto
 	        tempStmt.setString(2, gname);
 	        tempStmt.setInt(3, score);
 	        tempStmt.executeUpdate();
 
-	        System.out.println("Partida guardada exitosamente."); // Mensaje Debug Éxito
+	        System.out.println("Partida guardada exitosamente."); // Debug Éxito
 
 	    } catch (SQLException e) {
 	        System.err.println("Error SQL al guardar partida para player ID " + playerId + ": " + e.getMessage());
-	        // Relanzar la excepción para que la capa superior se entere del error
+	        // Relanzar la excepción
 	        throw e;
-	    } // Recursos (conexión, statement) se cierran automáticamente
+	    } // Recursos se cierran automáticamente
 	}
-
+	
 	public boolean buyTrophy(Player player, String trophyName, int trophyPrice)
 			throws InsufficientPointsException, SQLException {
 
