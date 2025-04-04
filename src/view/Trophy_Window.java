@@ -1,8 +1,9 @@
 package view;
 
+// --- Importaciones (sin cambios) ---
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component; 
+import java.awt.Component; // Necesario para alignmentX
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -17,7 +18,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
-
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -34,14 +36,16 @@ import javax.swing.border.EmptyBorder;
 import controlador.LoginControler;
 import model.InsufficientPointsException;
 import model.Player;
+// --- Fin Importaciones ---
 
 public class Trophy_Window extends JDialog implements ActionListener {
 
+    // --- Colores y Fuentes (sin cambios) ---
     private Color darkPurple = new Color(48, 25, 52);
     private Color mediumPurple = new Color(102, 51, 153);
     private Color lightPurple = new Color(204, 153, 255);
     private Color textColor = new Color(240, 240, 240);
-    private Color successColor = new Color(34, 139, 34);
+    private Color successColor = new Color(34, 139, 34); // Verde Bosque
     private Color panelBgColor = new Color(255, 255, 255, 50);
 
     private Font titleFont = new Font("Segoe UI", Font.BOLD, 28);
@@ -50,15 +54,19 @@ public class Trophy_Window extends JDialog implements ActionListener {
     private Font trophyInfoFont = new Font("Segoe UI", Font.PLAIN, 12);
     private Font buttonFont = new Font("Segoe UI", Font.BOLD, 12);
     private Font statusFont = new Font("Segoe UI", Font.BOLD, 12);
+    // --- Fin Colores y Fuentes ---
 
+    // --- Componentes UI ---
     private JPanel contentPane;
     private JLabel lblPlayerPoints;
-    private JPanel trophiesPanel;
+    private JPanel trophiesPanel; // << --- Hacer variable de instancia
 
+    // --- Referencias y datos ---
     private LoginControler loginControler;
     private Player player;
     private ArrayList<TrophyUIData> trophyList = new ArrayList<>();
 
+    // Clase interna TrophyUIData (sin cambios)
     private static class TrophyUIData {
         String name;
         int price;
@@ -81,6 +89,7 @@ public class Trophy_Window extends JDialog implements ActionListener {
 
     // --- Constructor ---
     public Trophy_Window(Player player, LoginControler loginControler) {
+    	setModal(true);
         this.player = player;
         this.loginControler = loginControler;
         setTitle("Sala de Trofeos - " + player.getName());
@@ -110,6 +119,7 @@ public class Trophy_Window extends JDialog implements ActionListener {
         contentPane.setBorder(new EmptyBorder(20, 20, 20, 20));
         setContentPane(contentPane);
 
+        // --- Panel Superior (sin cambios) ---
         JPanel topPanel = new JPanel(new BorderLayout(10, 0));
         topPanel.setOpaque(false);
         JLabel lblTitle = new JLabel("SALA DE TROFEOS");
@@ -124,15 +134,18 @@ public class Trophy_Window extends JDialog implements ActionListener {
         topPanel.add(lblPlayerPoints, BorderLayout.EAST);
         contentPane.add(topPanel, BorderLayout.NORTH);
 
+        // --- Panel Central (Grid de Trofeos) ---
+        // Asignar a la variable de instancia this.trophiesPanel
         this.trophiesPanel = new JPanel(new GridLayout(0, 3, 20, 20));
         this.trophiesPanel.setOpaque(false);
 
         for (TrophyUIData data : trophyList) {
             JPanel trophyCard = createTrophyCard(data);
-            this.trophiesPanel.add(trophyCard); 
+            this.trophiesPanel.add(trophyCard); // Añadir al panel de instancia
         }
-        contentPane.add(this.trophiesPanel, BorderLayout.CENTER); 
+        contentPane.add(this.trophiesPanel, BorderLayout.CENTER); // Añadir el panel de instancia
 
+        // --- Panel Inferior (sin cambios) ---
         JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         bottomPanel.setOpaque(false);
         JButton btnMenu = createStyledButton("Volver al Menú");
@@ -141,48 +154,55 @@ public class Trophy_Window extends JDialog implements ActionListener {
         bottomPanel.add(btnMenu);
         contentPane.add(bottomPanel, BorderLayout.SOUTH);
 
+        // --- Carga inicial estado y empaquetar ---
         loadTrophiesStatus();
         pack();
         setLocationRelativeTo(null);
     }
 
+    // --- Método createTrophyCard (sin cambios) ---
     private JPanel createTrophyCard(TrophyUIData data) {
         JPanel card = new JPanel();
-        card.setLayout(new BoxLayout(card, BoxLayout.Y_AXIS)); 
+        card.setLayout(new BoxLayout(card, BoxLayout.Y_AXIS)); // Layout vertical
         card.setBackground(panelBgColor);
         card.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(lightPurple, 1),
-                new EmptyBorder(15, 15, 15, 15) 
+                new EmptyBorder(15, 15, 15, 15) // Padding interno
         ));
-        card.setAlignmentX(Component.CENTER_ALIGNMENT); 
+        card.setAlignmentX(Component.CENTER_ALIGNMENT); // Centrar tarjeta si el layout lo permite
 
+        // Imagen (inicialmente interrogante)
         data.lblImage = new JLabel();
-        data.lblImage.setIcon(loadIcon(data.questionImagePath, 90)); 
+        data.lblImage.setIcon(loadIcon(data.questionImagePath, 90)); // Cargar icono interrogante
         data.lblImage.setAlignmentX(Component.CENTER_ALIGNMENT);
-        data.lblImage.setBorder(new EmptyBorder(0, 0, 10, 0)); 
+        data.lblImage.setBorder(new EmptyBorder(0, 0, 10, 0)); // Espacio debajo imagen
         card.add(data.lblImage);
 
+        // Nombre
         data.lblName = new JLabel(data.name);
         data.lblName.setFont(trophyNameFont);
         data.lblName.setForeground(textColor);
         data.lblName.setAlignmentX(Component.CENTER_ALIGNMENT);
         card.add(data.lblName);
 
+        // Precio
         data.lblPrice = new JLabel(data.price + " Puntos");
         data.lblPrice.setFont(trophyInfoFont);
-        data.lblPrice.setForeground(lightPurple); 
+        data.lblPrice.setForeground(lightPurple); // Color diferente para precio
         data.lblPrice.setAlignmentX(Component.CENTER_ALIGNMENT);
         card.add(data.lblPrice);
 
-        data.lblStatus = new JLabel(" "); 
+        // Estado (inicialmente vacío)
+        data.lblStatus = new JLabel(" "); // Espacio para mantener altura
         data.lblStatus.setFont(statusFont);
         data.lblStatus.setForeground(successColor);
         data.lblStatus.setAlignmentX(Component.CENTER_ALIGNMENT);
         card.add(data.lblStatus);
-        card.add(Box.createVerticalStrut(10)); 
+        card.add(Box.createVerticalStrut(10)); // Espacio antes del botón
 
+        // Botón Comprar
         data.btnBuy = createStyledButton("Comprar");
-        data.btnBuy.setActionCommand(data.name); 
+        data.btnBuy.setActionCommand(data.name); // Usar nombre como comando
         data.btnBuy.addActionListener(this);
         data.btnBuy.setAlignmentX(Component.CENTER_ALIGNMENT);
         card.add(data.btnBuy);
@@ -190,6 +210,7 @@ public class Trophy_Window extends JDialog implements ActionListener {
         return card;
     }
 
+    // --- Método createStyledButton (sin cambios) ---
      private JButton createStyledButton(String text) {
         JButton button = new JButton(text);
         button.setFont(buttonFont);
@@ -214,6 +235,7 @@ public class Trophy_Window extends JDialog implements ActionListener {
         return button;
     }
 
+    // --- Método loadIcon (sin cambios) ---
     private ImageIcon loadIcon(String path, int size) {
         try {
             java.net.URL imgURL = Trophy_Window.class.getResource(path);
@@ -229,6 +251,7 @@ public class Trophy_Window extends JDialog implements ActionListener {
         }
     }
 
+    // --- Método createPlaceholderIcon (sin cambios) ---
      private ImageIcon createPlaceholderIcon(int size) {
         java.awt.image.BufferedImage placeholder = new java.awt.image.BufferedImage(size, size, java.awt.image.BufferedImage.TYPE_INT_RGB);
         Graphics g = placeholder.createGraphics();
@@ -240,6 +263,7 @@ public class Trophy_Window extends JDialog implements ActionListener {
         return new ImageIcon(placeholder);
     }
 
+    // --- Método loadTrophiesStatus ---
     private void loadTrophiesStatus() {
         ArrayList<String> boughtTrophies;
         try {
@@ -249,6 +273,7 @@ public class Trophy_Window extends JDialog implements ActionListener {
             boughtTrophies = new ArrayList<>();
         }
 
+        // Bucle para actualizar cada tarjeta
         for (TrophyUIData data : trophyList) {
             boolean isBought = boughtTrophies.contains(data.name);
 
@@ -266,27 +291,31 @@ public class Trophy_Window extends JDialog implements ActionListener {
                 data.btnBuy.setText("Comprar");
                 data.lblPrice.setVisible(true);
             }
-        } 
+        } // --- Fin del bucle for ---
 
-        if (this.trophiesPanel != null) { 
-            this.trophiesPanel.revalidate(); 
-            this.trophiesPanel.repaint(); 
+        // --- !! NUEVAS LÍNEAS !! ---
+        // Después de actualizar todos los componentes, indicar a Swing
+        // que recalcule el layout y redibuje el panel contenedor.
+        if (this.trophiesPanel != null) { // Comprobación de seguridad
+            this.trophiesPanel.revalidate(); // Recalcular layout
+            this.trophiesPanel.repaint(); // Redibujar el panel y sus hijos
         }
+        // --- !! FIN NUEVAS LÍNEAS !! ---
 
-        updatePointsDisplay(); 
+        updatePointsDisplay(); // Actualizar puntos
     }
 
+    // --- Método updatePointsDisplay (sin cambios) ---
     private void updatePointsDisplay() {
         lblPlayerPoints.setText("Puntos: " + player.getPoints());
     }
 
+    // --- ActionListener (sin cambios) ---
     @Override
     public void actionPerformed(ActionEvent e) {
         String command = e.getActionCommand();
 
         if ("MENU".equals(command)) {
-            Menu_Window mw = new Menu_Window(this.loginControler, this.player);
-            mw.setVisible(true);
             this.dispose();
         } else {
             TrophyUIData targetTrophy = null;
@@ -304,6 +333,7 @@ public class Trophy_Window extends JDialog implements ActionListener {
         }
     }
 
+    // --- Método handleBuyAttempt (sin cambios) ---
     private void handleBuyAttempt(TrophyUIData trophyData) {
         int confirmation = JOptionPane.showConfirmDialog(this,
                 "¿Deseas comprar '" + trophyData.name + "' por " + trophyData.price + " puntos?",
@@ -317,12 +347,13 @@ public class Trophy_Window extends JDialog implements ActionListener {
 
                 if (success) {
                     this.player.setPoints(this.player.getPoints() - trophyData.price);
-                    loadTrophiesStatus();
+                    // Ya no llamamos a updatePointsDisplay() aquí, loadTrophiesStatus lo hará
+                    loadTrophiesStatus(); // Recargar TODO el estado visual
                     JOptionPane.showMessageDialog(this,
                             "¡Has comprado '" + trophyData.name + "'!",
                             "Compra Exitosa", JOptionPane.INFORMATION_MESSAGE);
                 } else {
-                    loadTrophiesStatus(); 
+                    loadTrophiesStatus(); // Recargar por si acaso (ej: ya lo tenía)
                     JOptionPane.showMessageDialog(this,
                             "No se pudo completar la compra.\n(Es posible que ya tuvieras el trofeo).",
                             "Compra Fallida", JOptionPane.WARNING_MESSAGE);
@@ -340,4 +371,4 @@ public class Trophy_Window extends JDialog implements ActionListener {
             }
         }
     }
-}
+} // Fin clase Trophy_Window

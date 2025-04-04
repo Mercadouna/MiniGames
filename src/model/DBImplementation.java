@@ -6,8 +6,9 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.ResourceBundle;
@@ -27,26 +28,26 @@ public  class DBImplementation implements PlayerDAO{
 	private String urlBD;
 	private String userBD;
 	private String passwordBD;
-	final String SQL = "SELECT US_NAME, PASS FROM PLAYER WHERE US_NAME = ? AND PASS = ?";
-	final String comparePL = "SELECT US_NAME FROM PLAYER WHERE US_NAME = ? ";
-	final String eliminarpr = "call DeleteUser(?)" ;
-	final String CHECKPL = "SELECT US_NAME FROM PLAYER WHERE US_NAME = ?";
-	final String addpl = "call InsertPlayer(?, ?)" ;
-	final String TakeID = "SELECT id from PLAYER WHERE US_NAME =  ?";
-	final String sqlInsert = "INSERT INTO usuario VALUES ( ?,?)";
-	final String sqlConsulta = "SELECT * FROM usuario";
-	final String SQLBORRAR = "DELETE FROM usuario WHERE nombre=?";
-	final String MODPOINTS = "UPDATE PLAYER SET POINTS = ? WHERE US_NAME = ?";
-	final String OBTAINPOINTS = "SELECT POINTS FORM PLAYER WHERE US_NAME = ?";
-	final String DELPL = "DELETE PLAYER FROM PLAYER WHERE US_NAME = ?";
-	final String GET_POINTS = "SELECT POINTS FROM PLAYER WHERE Us_Id = ?";
-    final String CHECK_BOUGHT = "SELECT 1 FROM BUY WHERE Us_Id = ? AND T_NAME = ?";
-    final String UPDATE_POINTS = "UPDATE PLAYER SET POINTS = POINTS - ? WHERE Us_Id = ?";
-    final String INSERT_BUY = "INSERT INTO BUY (Us_Id, T_NAME) VALUES (?, ?)";
-    final String GET_ID_BY_NAME = "SELECT Us_Id FROM PLAYER WHERE US_NAME = ?"; 
-    private final String GETPLAYS = "SELECT * FROM PLAYS WHERE Us_Id = ?";
+	private final String SQL = "SELECT US_NAME, PASS FROM PLAYER WHERE US_NAME = ? AND PASS = ?";
+	private final String comparePL = "SELECT US_NAME FROM PLAYER WHERE US_NAME = ? ";
+	private final String eliminarpr = "call DeleteUser(?)" ;
+	private final String CHECKPL = "SELECT US_NAME FROM PLAYER WHERE US_NAME = ?";
+	private final String addpl = "call InsertPlayer(?, ?)" ;
+	private final String TakeID = "SELECT id from PLAYER WHERE US_NAME =  ?";
+	private final String sqlInsert = "INSERT INTO usuario VALUES ( ?,?)";
+	private final String sqlConsulta = "SELECT * FROM usuario";
+	private final String SQLBORRAR = "DELETE FROM usuario WHERE nombre=?";
+	private final String MODPOINTS = "UPDATE PLAYER SET POINTS = ? WHERE US_NAME = ?";
+	private final String OBTAINPOINTS = "SELECT POINTS FORM PLAYER WHERE US_NAME = ?";
+	private final String DELPL = "DELETE PLAYER FROM PLAYER WHERE US_NAME = ?";
+	private final String GETPLAYS = "SELECT * FROM PLAYS WHERE Us_Id = ?";
 	private final String SAVEPLAYS = "INSERT INTO PLAYS(Us_ID, G_Name, DATI, SCORE) VALUES (?, ?, CURDATE(), ?)";
-
+	private final String GET_POINTS = "SELECT POINTS FROM PLAYER WHERE Us_Id = ?";
+	private final String CHECK_BOUGHT = "SELECT 1 FROM BUY WHERE Us_Id = ? AND T_NAME = ?";
+	private final String UPDATE_POINTS = "UPDATE PLAYER SET POINTS = POINTS - ? WHERE Us_Id = ?";
+	private final String INSERT_BUY = "INSERT INTO BUY (Us_Id, T_NAME) VALUES (?, ?)";
+	private final String GET_ID_BY_NAME = "SELECT Us_Id FROM PLAYER WHERE US_NAME = ?"; 
+	private final String ADD_POINTS_SQL = "UPDATE PLAYER SET POINTS = POINTS + ? WHERE Us_Id = ?";
 
 	public DBImplementation() {
 		this.configFile = ResourceBundle.getBundle("configClase");
@@ -57,29 +58,7 @@ public  class DBImplementation implements PlayerDAO{
 	}
 
 
-	
-	        
-	 @Override
-		public ArrayList<String> getBoughtTrophies(int userId) {
-		 this.openConnection();
-	        ArrayList<String> trophies = new ArrayList<>(); 
-	        try {
-	            PreparedStatement stm = con.prepareStatement("SELECT T_NAME FROM BUY WHERE Us_Id = ?");
-	            stm.setInt(1, userId);
-	            ResultSet rs = stm.executeQuery();
-	            while (rs.next()) {
-	                trophies.add(rs.getString("T_NAME"));
-	            }
-	            rs.close();
-	            stm.close();
-	            con.close();
-	        } catch (SQLException e) {
-	            System.err.println("Error al obtener los trofeos comprados: " + e.getMessage());
-	            e.printStackTrace();
-	        }
-	        return trophies;
-	    }
-	
+
 	@Override
 	public boolean compareplayer(Player player) {
 		boolean exist=false;
@@ -109,7 +88,7 @@ public  class DBImplementation implements PlayerDAO{
 		return exist;
 	}
 
-	
+
 	@Override
 	public void deleteplayer(Player player) {
 		this.openConnection();
@@ -119,7 +98,7 @@ public  class DBImplementation implements PlayerDAO{
 			stmt.setString(1, player.getName()); 
 			stmt.executeUpdate(); 
 
-			
+
 			stmt.close();
 			con.close();
 		} catch (SQLException e) {
@@ -128,37 +107,44 @@ public  class DBImplementation implements PlayerDAO{
 		}
 
 	}
-	
+
 
 
 	public int RandomPoints() {
-		
+
 		int randomNum = (int)(Math.random() * 300); 
-		
+
 		return randomNum;
-		
+
 	}
-	
+
 	@Override
-	public void modifypoints(Player player, String gname) {
-		int randpoint;
-	    randpoint =  RandomPoints();
-	    recordPlay( player, gname,randpoint);
-		this.openConnection();
-	    
-	    try {
-	        PreparedStatement stm = con.prepareStatement(MODPOINTS);
-	        stm.setInt(1, player.getPoints()+randpoint);
-	        stm.setString(2, player.getName());
-	        stm.executeUpdate();
-	        stm.close();
-	        con.close();
-	    } catch (SQLException e) {
-	        e.printStackTrace();
-	    }
+	public void modifypoints(Player player, String gname) { // gname ya no se usa aquí
+	    int randpoint;
+	    randpoint = RandomPoints();
+	    // recordPlay( player, gname,randpoint); // <<<--- ELIMINAR ESTA LÍNEA
 
+	    // El resto del método para actualizar puntos (también necesita arreglar conexión)
+	    String sql = MODPOINTS; // "UPDATE PLAYER SET POINTS = ? WHERE US_NAME = ?"
+	    int newPoints = player.getPoints() + randpoint; // Cuidado, esto usa puntos locales obsoletos
+
+	     try (Connection tempCon = DriverManager.getConnection(urlBD, userBD, passwordBD);
+	          PreparedStatement tempStmt = tempCon.prepareStatement(sql)) {
+
+	         // Idealmente, la actualización debería ser atómica en BD:
+	         // UPDATE PLAYER SET POINTS = POINTS + ? WHERE US_NAME = ?
+	         // Y pasar randpoint en lugar de newPoints.
+	         // Pero siguiendo tu SQL actual:
+	         tempStmt.setInt(1, newPoints);
+	         tempStmt.setString(2, player.getName());
+	         tempStmt.executeUpdate();
+
+	     } catch (SQLException e) {
+	         System.err.println("Error SQL en modifypoints: " + e.getMessage());
+	         e.printStackTrace(); // O manejar de otra forma
+	     }
+	     // Eliminar this.openConnection() y los close() manuales de aquí
 	}
-
 
 
 	@Override
@@ -198,33 +184,33 @@ public  class DBImplementation implements PlayerDAO{
 			stmt.executeQuery();
 			stmt.close();
 			con.close();
-			
-			
+
+
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		
+
+
 	}
-	
+
 	public boolean checkPL(Player player) {
-	    this.openConnection();
-	    boolean exist = false;
-	    try {
-	        stmt = con.prepareStatement(CHECKPL);
-	        stmt.setString(1, player.getName());
-	        ResultSet resultSet = stmt.executeQuery();
-	        if (resultSet.next()) {
-	            exist = true;
-	        }
-	        resultSet.close();
-	        stmt.close();
-	        con.close();
-	    } catch (SQLException e) {
-	        e.printStackTrace();
-	    }
-	    return exist;
+		this.openConnection();
+		boolean exist = false;
+		try {
+			stmt = con.prepareStatement(CHECKPL);
+			stmt.setString(1, player.getName());
+			ResultSet resultSet = stmt.executeQuery();
+			if (resultSet.next()) {
+				exist = true;
+			}
+			resultSet.close();
+			stmt.close();
+			con.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return exist;
 	}
 
 
@@ -251,196 +237,23 @@ public  class DBImplementation implements PlayerDAO{
 
 
 	public int obtpoints(Player player) {
-	    this.openConnection();
-	    int points = 0;
-	    try {
-	        PreparedStatement stm = con.prepareStatement("SELECT POINTS FROM PLAYER WHERE US_NAME = ?");
-	        stm.setString(1, player.getName());
-	        ResultSet rs = stm.executeQuery();
-	        if (rs.next()) {
-	            points = rs.getInt("POINTS");
-	        }
-	        rs.close();
-	        stm.close();
-	        con.close();
-	    } catch (SQLException e) {
-	        e.printStackTrace();
-	    }
-	    return points;
-	}
-	
-	
-	
-	
-	public boolean buyTrophy(Player player, String trophyName, int trophyPrice)
-            throws InsufficientPointsException, SQLException {
-
-        Connection localCon = null; // Usar una conexión local para la transacción
-        PreparedStatement checkPointsStmt = null;
-        PreparedStatement checkBoughtStmt = null;
-        PreparedStatement updatePointsStmt = null;
-        PreparedStatement insertBuyStmt = null;
-        PreparedStatement getIdStmt = null; // Para obtener ID si no lo tenemos
-        ResultSet rs = null;
-
-        boolean purchaseSuccessful = false;
-        int currentPoints = -1;
-        int playerId = -1;
-
-        try {
-            localCon = DriverManager.getConnection(urlBD, userBD, passwordBD);
-            localCon.setAutoCommit(false);
-            getIdStmt = localCon.prepareStatement(GET_ID_BY_NAME);
-            getIdStmt.setString(1, player.getName());
-            rs = getIdStmt.executeQuery();
-            if (rs.next()) {
-                playerId = rs.getInt("Us_Id");
-            } else {
-                 throw new SQLException("Player not found: " + player.getName());
-            }
-             rs.close();
-
-            checkBoughtStmt = localCon.prepareStatement(CHECK_BOUGHT);
-            checkBoughtStmt.setInt(1, playerId);
-            checkBoughtStmt.setString(2, trophyName);
-            rs = checkBoughtStmt.executeQuery();
-            if (rs.next()) {
-                 System.out.println("Player " + playerId + " already owns trophy " + trophyName);
-                 localCon.rollback(); 
-                 return false; 
-            }
-             rs.close(); 
-
-
-            checkPointsStmt = localCon.prepareStatement(GET_POINTS);
-            checkPointsStmt.setInt(1, playerId);
-            rs = checkPointsStmt.executeQuery();
-            if (rs.next()) {
-                currentPoints = rs.getInt("POINTS");
-            } else {
-                throw new SQLException("Could not retrieve points for player ID: " + playerId);
-            }
-             rs.close(); // Cerrar ResultSet
-
-
-            // 4. Comprobar si tiene puntos suficientes
-            if (currentPoints < trophyPrice) {
-                // No tiene suficientes puntos, lanzar excepción personalizada
-                throw new InsufficientPointsException("Puntos insuficientes para comprar " + trophyName +
-                        ". Necesarios: " + trophyPrice + ", Tienes: " + currentPoints);
-            }
-
-            // 5. Actualizar puntos del jugador
-            updatePointsStmt = localCon.prepareStatement(UPDATE_POINTS);
-            updatePointsStmt.setInt(1, trophyPrice); // Puntos a descontar
-            updatePointsStmt.setInt(2, playerId);
-            int rowsAffectedPlayer = updatePointsStmt.executeUpdate();
-
-            // 6. Insertar registro de compra
-            insertBuyStmt = localCon.prepareStatement(INSERT_BUY);
-            insertBuyStmt.setInt(1, playerId);
-            insertBuyStmt.setString(2, trophyName);
-            int rowsAffectedBuy = insertBuyStmt.executeUpdate();
-
-            // 7. Si ambas operaciones tuvieron éxito, confirmar transacción
-            if (rowsAffectedPlayer > 0 && rowsAffectedBuy > 0) {
-                localCon.commit();
-                purchaseSuccessful = true;
-                System.out.println("Compra exitosa: Jugador " + playerId + ", Trofeo " + trophyName);
-            } else {
-                // Si algo falló (inesperado si no hubo excepciones), deshacer
-                localCon.rollback();
-                 System.err.println("Error en la transacción de compra, rollback ejecutado.");
-                throw new SQLException("Database update failed during trophy purchase, transaction rolled back.");
-            }
-
-        } catch (SQLException | InsufficientPointsException e) {
-            // Si ocurre cualquier error SQL o de puntos insuficientes, deshacer transacción
-            if (localCon != null) {
-                try {
-                    System.err.println("Error durante la compra (" + e.getMessage() + "), ejecutando rollback...");
-                    localCon.rollback();
-                } catch (SQLException rollbackEx) {
-                     System.err.println("Error ejecutando rollback: " + rollbackEx.getMessage());
-                }
-            }
-             // Relanzar la excepción para que la capa superior la maneje
-             throw e;
-
-        } finally {
-            // Asegurarse de cerrar todos los recursos y restaurar auto-commit
-             try { if (rs != null) rs.close(); } catch (SQLException e) { /* Ignorar */ }
-             try { if (getIdStmt != null) getIdStmt.close(); } catch (SQLException e) { /* Ignorar */ }
-             try { if (checkPointsStmt != null) checkPointsStmt.close(); } catch (SQLException e) { /* Ignorar */ }
-             try { if (checkBoughtStmt != null) checkBoughtStmt.close(); } catch (SQLException e) { /* Ignorar */ }
-             try { if (updatePointsStmt != null) updatePointsStmt.close(); } catch (SQLException e) { /* Ignorar */ }
-             try { if (insertBuyStmt != null) insertBuyStmt.close(); } catch (SQLException e) { /* Ignorar */ }
-             if (localCon != null) {
-                 try {
-                     localCon.setAutoCommit(true); // Restaurar modo auto-commit
-                     localCon.close(); // Cerrar conexión
-                 } catch (SQLException e) {
-                      System.err.println("Error al cerrar conexión/restaurar auto-commit: " + e.getMessage());
-                 }
-             }
-            // ¡OJO! Si usas un Pool de Conexiones, el cierre (localCon.close())
-            // normalmente devuelve la conexión al pool en lugar de cerrarla físicamente.
-            // La gestión de autoCommit también puede variar según el pool.
-        }
-
-        return purchaseSuccessful;
-    }
-	
-	
-	
-	@Override
-	public ArrayList getPlays(Player player) {
-		ArrayList<Plays> plays= new ArrayList<Plays>(); 
 		this.openConnection();
+		int points = 0;
 		try {
-			stmt = con.prepareStatement(GETPLAYS);
-			stmt.setString(1, ReturnID(player));
-			ResultSet retrievedPlays = stmt.executeQuery();
-			while (retrievedPlays.next()) {
-				Plays p=new Plays(
-						retrievedPlays.getString("G_NAME"),
-						retrievedPlays.getDate("DATI").toLocalDate(),
-						retrievedPlays.getInt("SCORE")
-						);
-				plays.add(p);
+			PreparedStatement stm = con.prepareStatement("SELECT POINTS FROM PLAYER WHERE US_NAME = ?");
+			stm.setString(1, player.getName());
+			ResultSet rs = stm.executeQuery();
+			if (rs.next()) {
+				points = rs.getInt("POINTS");
 			}
-			retrievedPlays.close();
-			stmt.close();
+			rs.close();
+			stm.close();
 			con.close();
 		} catch (SQLException e) {
-			System.out.println("Error al verificar credenciales: " + e.getMessage());
+			e.printStackTrace();
 		}
-		return plays;
+		return points;
 	}
-
-
-
-
-	public void recordPlay(Player player, String gname, int score) {
-		// TODO Auto-generated method stub
-		this.openConnection();
-		try {
-			stmt=con.prepareStatement(SAVEPLAYS);
-			stmt.setString(1, ReturnID(player));
-			stmt.setString(2, gname);
-			stmt.setInt(3, score);
-			stmt.executeUpdate();
-		}catch (SQLException e) {
-			System.out.println("Error al verificar credenciales: " + e.getMessage());
-		}
-		
-	}
-
-
-
-
-	
-	
 	/*public boolean comprobarUsuario(Usuario usuario){
 		// Abrimos la conexion
 		boolean existe=false;
@@ -471,14 +284,270 @@ public  class DBImplementation implements PlayerDAO{
 	} */
 
 
-	
 
-
-
-
+	@Override
+	public ArrayList getPlays(Player player) {
+		ArrayList<Plays> plays= new ArrayList<Plays>(); 
+		this.openConnection();
+		try {
+			stmt = con.prepareStatement(GETPLAYS);
+			stmt.setString(1, ReturnID(player));
+			ResultSet retrievedPlays = stmt.executeQuery();
+			while (retrievedPlays.next()) {
+				Plays p=new Plays(
+						retrievedPlays.getString("G_NAME"),
+						retrievedPlays.getDate("DATI").toLocalDate(),
+						retrievedPlays.getInt("SCORE")
+						);
+				plays.add(p);
+			}
+			retrievedPlays.close();
+			stmt.close();
+			con.close();
+		} catch (SQLException e) {
+			System.out.println("Error al verificar credenciales: " + e.getMessage());
+		}
+		return plays;
 	}
 
-	/*       @Override
+
+
+
+	@Override // Añadir @Override si está en la interfaz PlayerDAO
+	public void recordPlay(Player player, String gname, int score) throws SQLException { // Añadir throws SQLException
+	    int playerId = -1;
+	    // --- Obtener playerId de forma segura (NECESITA MEJORA URGENTE en ReturnID/gestión de ID) ---
+	    try {
+	        String idStr = this.ReturnID(player); // Sigue usando el método problemático
+	        if (idStr != null && !idStr.isEmpty()) {
+	            playerId = Integer.parseInt(idStr);
+	        } else {
+	            // Lanzar excepción si no podemos obtener el ID es más robusto
+	            throw new SQLException("recordPlay: No se pudo obtener el ID del jugador para " + player.getName());
+	        }
+	    } catch (NumberFormatException e) {
+	        throw new SQLException("recordPlay: Fallo al convertir el ID a número desde ReturnID para " + player.getName() + ". ReturnID devolvió: '" + this.ReturnID(player) + "'", e);
+	    } catch (Exception e) { // Captura otros errores de ReturnID
+	        throw new SQLException("recordPlay: Error llamando a ReturnID para " + player.getName(), e);
+	    }
+	    // --- Fin obtención ID ---
+
+	    String sql = SAVEPLAYS;
+	    System.out.println("Guardando partida: Jugador ID=" + playerId + ", Juego=" + gname + ", Score=" + score); // Mensaje Debug
+
+	    // Usar Try-with-Resources para conexión y statement
+	    try (Connection tempCon = DriverManager.getConnection(urlBD, userBD, passwordBD);
+	         PreparedStatement tempStmt = tempCon.prepareStatement(sql)) {
+
+	        tempStmt.setInt(1, playerId);    // <<<--- CORRECCIÓN: Usar setInt
+	        tempStmt.setString(2, gname);
+	        tempStmt.setInt(3, score);
+	        tempStmt.executeUpdate();
+
+	        System.out.println("Partida guardada exitosamente."); // Mensaje Debug Éxito
+
+	    } catch (SQLException e) {
+	        System.err.println("Error SQL al guardar partida para player ID " + playerId + ": " + e.getMessage());
+	        // Relanzar la excepción para que la capa superior se entere del error
+	        throw e;
+	    } // Recursos (conexión, statement) se cierran automáticamente
+	}
+
+	public boolean buyTrophy(Player player, String trophyName, int trophyPrice)
+			throws InsufficientPointsException, SQLException {
+
+		Connection localCon = null; // Usar una conexión local para la transacción
+		PreparedStatement checkPointsStmt = null;
+		PreparedStatement checkBoughtStmt = null;
+		PreparedStatement updatePointsStmt = null;
+		PreparedStatement insertBuyStmt = null;
+		PreparedStatement getIdStmt = null; // Para obtener ID si no lo tenemos
+		ResultSet rs = null;
+
+		boolean purchaseSuccessful = false;
+		int currentPoints = -1;
+		int playerId = -1;
+
+		try {
+			localCon = DriverManager.getConnection(urlBD, userBD, passwordBD);
+			localCon.setAutoCommit(false);
+			getIdStmt = localCon.prepareStatement(GET_ID_BY_NAME);
+			getIdStmt.setString(1, player.getName());
+			rs = getIdStmt.executeQuery();
+			if (rs.next()) {
+				playerId = rs.getInt("Us_Id");
+			} else {
+				throw new SQLException("Player not found: " + player.getName());
+			}
+			rs.close();
+
+			checkBoughtStmt = localCon.prepareStatement(CHECK_BOUGHT);
+			checkBoughtStmt.setInt(1, playerId);
+			checkBoughtStmt.setString(2, trophyName);
+			rs = checkBoughtStmt.executeQuery();
+			if (rs.next()) {
+				System.out.println("Player " + playerId + " already owns trophy " + trophyName);
+				localCon.rollback(); 
+				return false; 
+			}
+			rs.close(); 
+
+
+			checkPointsStmt = localCon.prepareStatement(GET_POINTS);
+			checkPointsStmt.setInt(1, playerId);
+			rs = checkPointsStmt.executeQuery();
+			if (rs.next()) {
+				currentPoints = rs.getInt("POINTS");
+			} else {
+				throw new SQLException("Could not retrieve points for player ID: " + playerId);
+			}
+			rs.close(); // Cerrar ResultSet
+
+
+			// 4. Comprobar si tiene puntos suficientes
+			if (currentPoints < trophyPrice) {
+				// No tiene suficientes puntos, lanzar excepción personalizada
+				throw new InsufficientPointsException("Puntos insuficientes para comprar " + trophyName +
+						". Necesarios: " + trophyPrice + ", Tienes: " + currentPoints);
+			}
+
+			// 5. Actualizar puntos del jugador
+			updatePointsStmt = localCon.prepareStatement(UPDATE_POINTS);
+			updatePointsStmt.setInt(1, trophyPrice); // Puntos a descontar
+			updatePointsStmt.setInt(2, playerId);
+			int rowsAffectedPlayer = updatePointsStmt.executeUpdate();
+
+			// 6. Insertar registro de compra
+			insertBuyStmt = localCon.prepareStatement(INSERT_BUY);
+			insertBuyStmt.setInt(1, playerId);
+			insertBuyStmt.setString(2, trophyName);
+			int rowsAffectedBuy = insertBuyStmt.executeUpdate();
+
+			// 7. Si ambas operaciones tuvieron éxito, confirmar transacción
+			if (rowsAffectedPlayer > 0 && rowsAffectedBuy > 0) {
+				localCon.commit();
+				purchaseSuccessful = true;
+				System.out.println("Compra exitosa: Jugador " + playerId + ", Trofeo " + trophyName);
+			} else {
+				// Si algo falló (inesperado si no hubo excepciones), deshacer
+				localCon.rollback();
+				System.err.println("Error en la transacción de compra, rollback ejecutado.");
+				throw new SQLException("Database update failed during trophy purchase, transaction rolled back.");
+			}
+
+		} catch (SQLException | InsufficientPointsException e) {
+			// Si ocurre cualquier error SQL o de puntos insuficientes, deshacer transacción
+			if (localCon != null) {
+				try {
+					System.err.println("Error durante la compra (" + e.getMessage() + "), ejecutando rollback...");
+					localCon.rollback();
+				} catch (SQLException rollbackEx) {
+					System.err.println("Error ejecutando rollback: " + rollbackEx.getMessage());
+				}
+			}
+			// Relanzar la excepción para que la capa superior la maneje
+			throw e;
+
+		} finally {
+			// Asegurarse de cerrar todos los recursos y restaurar auto-commit
+			try { if (rs != null) rs.close(); } catch (SQLException e) { /* Ignorar */ }
+			try { if (getIdStmt != null) getIdStmt.close(); } catch (SQLException e) { /* Ignorar */ }
+			try { if (checkPointsStmt != null) checkPointsStmt.close(); } catch (SQLException e) { /* Ignorar */ }
+			try { if (checkBoughtStmt != null) checkBoughtStmt.close(); } catch (SQLException e) { /* Ignorar */ }
+			try { if (updatePointsStmt != null) updatePointsStmt.close(); } catch (SQLException e) { /* Ignorar */ }
+			try { if (insertBuyStmt != null) insertBuyStmt.close(); } catch (SQLException e) { /* Ignorar */ }
+			if (localCon != null) {
+				try {
+					localCon.setAutoCommit(true); // Restaurar modo auto-commit
+					localCon.close(); // Cerrar conexión
+				} catch (SQLException e) {
+					System.err.println("Error al cerrar conexión/restaurar auto-commit: " + e.getMessage());
+				}
+			}
+			// ¡OJO! Si usas un Pool de Conexiones, el cierre (localCon.close())
+			// normalmente devuelve la conexión al pool en lugar de cerrarla físicamente.
+			// La gestión de autoCommit también puede variar según el pool.
+		}
+
+		return purchaseSuccessful;
+	}
+
+
+
+	@Override
+	public ArrayList<String> getBoughtTrophies(int userId) {
+		this.openConnection();
+		ArrayList<String> trophies = new ArrayList<>(); 
+		try {
+			PreparedStatement stm = con.prepareStatement("SELECT T_NAME FROM BUY WHERE Us_Id = ?");
+			stm.setInt(1, userId);
+			ResultSet rs = stm.executeQuery();
+			while (rs.next()) {
+				trophies.add(rs.getString("T_NAME"));
+			}
+			rs.close();
+			stm.close();
+			con.close();
+		} catch (SQLException e) {
+			System.err.println("Error al obtener los trofeos comprados: " + e.getMessage());
+			e.printStackTrace();
+		}
+		return trophies;
+	}
+
+
+
+
+
+	@Override // Si está en PlayerDAO
+	public void addPoints(Player player, int pointsToAdd) throws SQLException {
+	    // --- Obtener playerId de forma segura (NECESITA MEJORA URGENTE en ReturnID/gestión de ID) ---
+	    int playerId = -1;
+	    try {
+	        String idStr = this.ReturnID(player); // Sigue usando el método problemático
+	        if (idStr != null && !idStr.isEmpty()) {
+	            playerId = Integer.parseInt(idStr);
+	        } else {
+	            throw new SQLException("addPoints: No se pudo obtener el ID del jugador para " + player.getName());
+	        }
+	    } catch (NumberFormatException e) {
+	        throw new SQLException("addPoints: Fallo al convertir el ID a número desde ReturnID para " + player.getName() + ". ReturnID devolvió: '" + this.ReturnID(player) + "'", e);
+	    } catch (Exception e) { // Captura otros errores de ReturnID
+	        throw new SQLException("addPoints: Error llamando a ReturnID para " + player.getName(), e);
+	    }
+	    // --- Fin obtención ID ---
+
+	    if (playerId <= 0) { // Comprobación extra
+	        throw new SQLException("addPoints: ID de jugador inválido obtenido: " + playerId);
+	    }
+
+	    String sql = ADD_POINTS_SQL;
+	    System.out.println("Intentando añadir " + pointsToAdd + " puntos al jugador ID: " + playerId); // Debug
+
+	    try (Connection tempCon = DriverManager.getConnection(urlBD, userBD, passwordBD);
+	         PreparedStatement tempStmt = tempCon.prepareStatement(sql)) {
+
+	        tempStmt.setInt(1, pointsToAdd); // Puntos a añadir
+	        tempStmt.setInt(2, playerId);    // <<<--- CORRECCIÓN: Usar setInt para el ID
+
+	        int rowsAffected = tempStmt.executeUpdate(); // Ejecutar el UPDATE
+
+	        if (rowsAffected > 0) {
+	            System.out.println("Puntos añadidos correctamente para jugador ID " + playerId); // Debug Éxito
+	        } else {
+	             // Esto podría pasar si el playerId no existe en la tabla PLAYER
+	             System.err.println("Advertencia: No se actualizaron los puntos para el jugador ID " + playerId + ". ¿Existe el jugador en la BD?");
+	             // Considera lanzar una excepción si esto no debería ocurrir
+	             // throw new SQLException("No se encontró el jugador con ID " + playerId + " para actualizar puntos.");
+	        }
+
+	    } catch (SQLException e) {
+	        System.err.println("Error SQL al añadir puntos para player ID " + playerId + ": " + e.getMessage());
+	        throw e; // Relanzar la excepción para que el controlador (y quizás la vista) se enteren
+	    } // Recursos se cierran automáticamente
+	}
+}	
+/*       @Override
 		public boolean insertarUsuario(Usuario usuario) {
 			// TODO Auto-generated method stub
 			boolean ok=false;
@@ -503,7 +572,7 @@ public  class DBImplementation implements PlayerDAO{
 
     } */
 
-	/*    public Map<String, Usuario> consultaUsuarios() {
+/*    public Map<String, Usuario> consultaUsuarios() {
 			// TODO Auto-generated method stub
 
 			ResultSet rs = null;
@@ -535,7 +604,7 @@ public  class DBImplementation implements PlayerDAO{
 			return equipos;
 
 } */
-	/*      public boolean borrarUsuario(String usuario) {
+/*      public boolean borrarUsuario(String usuario) {
 			// TODO Auto-generated method stub
 			boolean ok=false;
 
@@ -560,7 +629,7 @@ public  class DBImplementation implements PlayerDAO{
 
 		} */
 
-	/*      public boolean actualizarUsuario(Usuario usuario) {
+/*      public boolean actualizarUsuario(Usuario usuario) {
 			// TODO Auto-generated method stub
 			boolean ok=false;
 
@@ -585,5 +654,3 @@ public  class DBImplementation implements PlayerDAO{
 
 
 		} */
-
-

@@ -1,3 +1,4 @@
+
 package view;
 
 import java.awt.Color;
@@ -20,6 +21,7 @@ import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel; // <<<--- Importar DefaultListModel
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel; // Importar JLabel si usas un título en el panel
 import javax.swing.JPanel;
@@ -36,12 +38,12 @@ import model.Player;
 import model.Plays; // Importar Plays
 
 // Implementar ActionListener para manejar eventos de botón
-public class Stats_plays_Window extends JFrame implements ActionListener {
+public class Stats_plays_Window extends JDialog implements ActionListener {
 
     private JPanel contentPane;
     private LoginControler cont;
     private Player player;
-
+    
     // --- Estilos (Colores, Fuentes, Iconos) ---
     private Color darkPurple = new Color(48, 25, 52);
     private Color mediumPurple = new Color(102, 51, 153);
@@ -59,6 +61,8 @@ public class Stats_plays_Window extends JFrame implements ActionListener {
      * Constructor
      */
     public Stats_plays_Window(LoginControler cont, Player j) {
+    	setModal(true);
+    	
         // Validar entradas (opcional pero recomendado)
         if (cont == null || j == null) {
              throw new IllegalArgumentException("LoginControler y Player no pueden ser null.");
@@ -93,7 +97,7 @@ public class Stats_plays_Window extends JFrame implements ActionListener {
         lblWindowTitle.setHorizontalAlignment(SwingConstants.CENTER);
         contentPane.add(lblWindowTitle, BorderLayout.NORTH);
 
-
+ 
         // --- Lista de Estadísticas ---
         DefaultListModel<Plays> listModel = new DefaultListModel<>(); // <<<--- Usar DefaultListModel<Plays>
         JList<Plays> list = new JList<>(listModel); // <<<--- Crear JList con el Model
@@ -103,7 +107,7 @@ public class Stats_plays_Window extends JFrame implements ActionListener {
         list.setSelectionBackground(mediumPurple);
         list.setSelectionForeground(textColor);
         // list.setCellRenderer(...); // Podrías usar un CellRenderer personalizado para mejor formato
-
+ 
         // --- Cargar datos en el modelo ---
         try {
             ArrayList<Plays> playsData = cont.getPlays(j); // Llama al controlador
@@ -134,7 +138,7 @@ public class Stats_plays_Window extends JFrame implements ActionListener {
 
         // Añadir el scrollPane al CENTRO
         contentPane.add(scrollPane, BorderLayout.CENTER);
-
+ 
 
         // --- Panel Inferior y Botón ---
         JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
@@ -152,6 +156,7 @@ public class Stats_plays_Window extends JFrame implements ActionListener {
 
     // --- Método createButton (sin cambios, revisa estilo si quieres) ---
     private JButton createButton(String text, ImageIcon icon) {
+    	
         JButton button = new JButton(text, icon);
         button.setFont(buttonFont);
         button.setForeground(textColor);
@@ -219,9 +224,7 @@ public class Stats_plays_Window extends JFrame implements ActionListener {
                   this.dispose();
                   return;
              }
-            // Crear y mostrar la ventana del menú principal
-            Menu_Window menu = new Menu_Window(this.cont, this.player);
-            menu.setVisible(true);
+           
             // Cerrar esta ventana de estadísticas
             this.dispose();
         }

@@ -113,7 +113,7 @@ public class Register_Window extends JFrame implements ActionListener {
             if (!existe) {
                 cont.addplayer(new Player(textField.getText(), new String(pwfpasswrd.getPassword()), 0));
                 int playerPoints = cont.obtpoints(new Player(textField.getText(), new String(pwfpasswrd.getPassword()), 0));
-                Menu_Window mw = new Menu_Window(this.cont, new Player(textField.getText(), new String(pwfpasswrd.getPassword()), playerPoints));
+                Menu_Window mw = new Menu_Window(cont, new Player(textField.getText(), new String(pwfpasswrd.getPassword()), playerPoints));
                 mw.setVisible(true);
                 this.dispose();
             } else {
@@ -122,7 +122,7 @@ public class Register_Window extends JFrame implements ActionListener {
         }
         
         if (e.getSource() == btnBack) {
-            Login_Window lw = new Login_Window(this.cont);
+            Login_Window lw = new Login_Window(cont);
             lw.setVisible(true);
             this.dispose();
         }

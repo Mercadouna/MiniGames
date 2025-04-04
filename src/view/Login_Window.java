@@ -123,18 +123,19 @@ public class Login_Window extends JFrame implements ActionListener {
             j.setPoints(playerPoints);
 
             if (cont.compareplayer(j) == true) {
-                Menu_Window mw = new Menu_Window(this.cont, j);
+                Menu_Window mw = new Menu_Window(cont, j);
                 mw.setVisible(true);
-                this.dispose(); 
+                this.dispose();
             } else {
                 lblErrorMessage.setText("Incorrect player or password"); // Mostrar mensaje de error
             }
         }
 
         if (e.getSource() == btnSingUp) {
-            Register_Window mw = new Register_Window(this.cont);
+            Register_Window mw = new Register_Window(cont);
             mw.setVisible(true);
             this.dispose();
         }
+
     }
 }
