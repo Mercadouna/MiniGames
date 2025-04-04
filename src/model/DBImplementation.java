@@ -429,9 +429,7 @@ public  class DBImplementation implements PlayerDAO{
                       System.err.println("Error al cerrar conexión/restaurar auto-commit: " + e.getMessage());
                  }
              }
-            // ¡OJO! Si usas un Pool de Conexiones, el cierre (localCon.close())
-            // normalmente devuelve la conexión al pool en lugar de cerrarla físicamente.
-            // La gestión de autoCommit también puede variar según el pool.
+            
         }
 
         return purchaseSuccessful;
