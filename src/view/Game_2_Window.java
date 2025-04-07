@@ -24,6 +24,7 @@ public class Game_2_Window extends JDialog {
     private final JPanel contentPanel = new JPanel();
 
     public Game_2_Window(LoginControler cont) {
+    	setModal(true);
         setBounds(100, 100, 800, 500);
         getContentPane().setLayout(null);
         contentPanel.setBounds(0, 0, 800, 500);

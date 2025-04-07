@@ -60,6 +60,7 @@ public class Stats_plays_Window extends JFrame implements ActionListener {
      * Constructor
      */
     public Stats_plays_Window(LoginControler cont, Player j) {
+    	
         // Validar entradas (opcional pero recomendado)
         if (cont == null || j == null) {
              throw new IllegalArgumentException("LoginControler y Player no pueden ser null.");
