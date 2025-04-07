@@ -64,7 +64,7 @@
  (3, 'AIM', '2025-01-05', 30);
  
  -- Creation of different procedures and functions.
- DELIMITER //
+ /*DELIMITER //
  create procedure MostrarPlayer1()
  begin
  DECLARE id_user INT;
@@ -92,7 +92,7 @@
  DELIMITER ;
  -- to call the procedure
  call MostrarPlayer1(); 
- --  drop procedure MostrarPlayer;
+ --  drop procedure MostrarPlayer;*/
  
  
  
@@ -101,7 +101,7 @@
  create procedure InsertPlayer(us_name varchar(50), us_password varchar(50))
  begin 
  declare Id_user int;
- if not exists(select * from Player where US_NAME=us_name and PASS=us_password) then 
+ if exists(select * from Player where US_NAME=us_name) then 
  select max(Us_Id) + 1 into Id_user from Player;
  insert into Player values(Id_user, us_name, 0, us_password);
  select "Successfully created";
@@ -168,14 +168,8 @@
  begin
  declare id_us int;
  declare return_text varchar(50);
- declare fin boolean default false;
-DECLARE CONTINUE HANDLER FOR NOT FOUND SET fin = TRUE; 
  select Us_Id into id_us from PLAYER where US_NAME=nom_us and PASS=password_us;
- if fin then
-select concat('Error: No user found with name "', nom_us, '" and the given password.') into return_text;
-else
-select concat('The player ',nom_us , ' have this id: ',id_us) into return_text;
- end if ;
+ select concat('The player ',nom_us , ' have this id: ',id_us) into return_text;
  return return_text;
  end //
  Delimiter ;
@@ -204,7 +198,6 @@ select concat('The player ',nom_us , ' have this id: ',id_us) into return_text;
  begin
  declare name_us, paswword_us, return_text varchar(50);
  declare points_us int;
- 
  select US_NAME into name_us from player where Us_Id=id_us;
  select PASS into paswword_us from player where Us_Id=id_us;
  select POINTS into points_us from player where Us_Id=id_us;
@@ -253,7 +246,7 @@ select concat('The player ',nom_us , ' have this id: ',id_us) into return_text;
  -- to call the procedure
  -- call ModifyUserPointsGame('Mikel', 20, 'ARITMETICS');
  
- 
+
  
  -- drop database MINIGAMES;
  -- drop procedure       ;
