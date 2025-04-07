@@ -64,37 +64,29 @@
  (3, 'AIM', '2025-01-05', 30);
  
  -- Creation of different procedures and functions.
- /*DELIMITER //
- create procedure MostrarPlayer1()
+ -- This procedure show the players with 50 or more points
+ DELIMITER //
+ create procedure MostrarPlayer()
  begin
- DECLARE id_user INT;
- DECLARE nombre VARCHAR(20);
- DECLARE contraseña VARCHAR(30);
- DECLARE points INT;
- DECLARE fin BOOLEAN DEFAULT FALSE;
- DECLARE records_found BOOLEAN DEFAULT FALSE;
- DECLARE c CURSOR FOR SELECT Us_id, US_NAME, PASS, POINTS FROM PLAYER WHERE POINTS > 50;
- DECLARE CONTINUE HANDLER FOR NOT FOUND SET fin = TRUE; 
- OPEN c;
- FETCH c INTO id_user, nombre, contraseña, points;
-  IF fin THEN
- 	SELECT 'There are no users with more than 50 points.' AS 'Message';
- ELSE
- 	SET records_found = TRUE;
- WHILE fin = FALSE DO
- 
- 	SELECT id_user AS 'ID', nombre AS 'Name', contraseña AS 'Password', points AS 'Points';
- 	FETCH c INTO id_user, nombre, contraseña, points;
- END WHILE;
-  END IF;
- CLOSE c;
- END //
- DELIMITER ;
- -- to call the procedure
- call MostrarPlayer1(); 
- --  drop procedure MostrarPlayer;*/
- 
- 
+declare id_user int;
+declare nombre varchar(50);
+declare contrasena varchar(50);
+declare pointss int;
+declare fin boolean default 0;
+declare c cursor for select Us_id, US_NAME, PASS, POINTS from PLAYER where POINTS > 50;
+declare continue handler for not found set fin = 1; 
+open c;
+	fetch c into id_user, nombre, contrasena, pointss;
+		while fin = 0 do
+			select id_user as 'ID', nombre as 'Name', contrasena as 'Password', pointss as 'Points';
+			fetch c into id_user, nombre, contrasena, pointss;
+		end while;
+close c;
+end //
++Delimiter ;
+-- to call the procedure
+-- call MostrarPlayer();
+
  
  -- Creation of a procedure for inserting a player to the database.
  Delimiter //
