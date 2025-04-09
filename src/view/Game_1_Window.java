@@ -37,7 +37,7 @@ import model.Player;
 // Implementamos ActionListener para el Timer
 public class Game_1_Window extends JDialog implements ActionListener {
 
-    private static final int GAME_DURATION_SECONDS = 60; // 1 minuto
+    private static final int GAME_DURATION_SECONDS = 30; // 30 segundos
     private static final int DOT_DIAMETER = 30;  //tamaño del zirculo donde se debe clickar para hacer puntos
     private static final int POINTS_HIT = 40;    //los puntos que se consiguen si le da al zirculo
     private static final int POINTS_MISS = -20; // puntos que se restan si clicka en un sitio de la ventana que no sea el circulo
