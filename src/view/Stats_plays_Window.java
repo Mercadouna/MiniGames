@@ -21,6 +21,7 @@ import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel; // <<<--- Importar DefaultListModel
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel; // Importar JLabel si usas un título en el panel
 import javax.swing.JPanel;
@@ -29,20 +30,22 @@ import javax.swing.SwingConstants;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
+
+import controler.LoginControler;
+
 import javax.swing.JList;
 import javax.swing.JOptionPane; // Para mensajes de error
 
-import controlador.LoginControler;
 import model.Player;
 import model.Plays; // Importar Plays
 
 // Implementar ActionListener para manejar eventos de botón
-public class Stats_plays_Window extends JFrame implements ActionListener {
+public class Stats_plays_Window extends JDialog implements ActionListener {
 
     private JPanel contentPane;
     private LoginControler cont;
     private Player player;
-
+    
     // --- Estilos (Colores, Fuentes, Iconos) ---
     private Color darkPurple = new Color(48, 25, 52);
     private Color mediumPurple = new Color(102, 51, 153);
@@ -60,15 +63,16 @@ public class Stats_plays_Window extends JFrame implements ActionListener {
      * Constructor
      */
     public Stats_plays_Window(LoginControler cont, Player j) {
+    	setModal(true);
     	
         // Validar entradas (opcional pero recomendado)
         if (cont == null || j == null) {
-             throw new IllegalArgumentException("LoginControler y Player no pueden ser null.");
+             throw new IllegalArgumentException("LoginControler and Player cannot be null.");
         }
         this.cont = cont;
         this.player = j;
 
-        setTitle("Estadísticas de Partidas - " + player.getName());
+        setTitle("Game Stats - " + player.getName());
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setPreferredSize(new Dimension(800, 600));
 
@@ -89,7 +93,7 @@ public class Stats_plays_Window extends JFrame implements ActionListener {
         setContentPane(contentPane);
 
         // --- Título (Opcional) ---
-        JLabel lblWindowTitle = new JLabel("Historial de Partidas");
+        JLabel lblWindowTitle = new JLabel("Game History");
         lblWindowTitle.setFont(titleFont);
         lblWindowTitle.setForeground(textColor);
         lblWindowTitle.setHorizontalAlignment(SwingConstants.CENTER);
@@ -117,16 +121,16 @@ public class Stats_plays_Window extends JFrame implements ActionListener {
                  // Mostrar mensaje en la lista si no hay datos
                  // Necesitarías cambiar el tipo del modelo a String o usar un renderer
                  // Por ahora, lo dejamos vacío o podrías añadir un JLabel aparte.
-                 System.out.println("No se encontraron jugadas para " + player.getName());
+                 System.out.println("No games found " + player.getName());
                  // Podrías poner un mensaje en un JLabel en lugar de la lista aquí.
             }
         } catch (Exception e) {
-            System.err.println("Error al obtener o mostrar jugadas: " + e.getMessage());
+            System.err.println("Error when obtaining or creating games: " + e.getMessage());
             e.printStackTrace(); // Para depuración
              // Mostrar mensaje de error al usuario
             JOptionPane.showMessageDialog(this,
-                    "No se pudieron cargar las estadísticas.\nError: " + e.getMessage(),
-                    "Error de Carga", JOptionPane.ERROR_MESSAGE);
+                    "couldn load Stats.\nError: " + e.getMessage(),
+                    "Error when Loading", JOptionPane.ERROR_MESSAGE);
              // Añadir mensaje de error al listModel si es de tipo String, o mostrar en otro lugar.
              // listModel.addElement("Error al cargar datos..."); // Solo si listModel fuera <String>
         }
@@ -141,7 +145,7 @@ public class Stats_plays_Window extends JFrame implements ActionListener {
         // --- Panel Inferior y Botón ---
         JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
         bottomPanel.setOpaque(false);
-        btnGoB = createButton("Menú Principal", HomeIcon);
+        btnGoB = createButton("Main Menu", HomeIcon);
         btnGoB.addActionListener(this);
         bottomPanel.add(btnGoB);
         contentPane.add(bottomPanel, BorderLayout.SOUTH);
@@ -154,6 +158,7 @@ public class Stats_plays_Window extends JFrame implements ActionListener {
 
     // --- Método createButton (sin cambios, revisa estilo si quieres) ---
     private JButton createButton(String text, ImageIcon icon) {
+    	
         JButton button = new JButton(text, icon);
         button.setFont(buttonFont);
         button.setForeground(textColor);
@@ -189,11 +194,11 @@ public class Stats_plays_Window extends JFrame implements ActionListener {
             if (imgURL != null) {
                 return new ImageIcon(imgURL);
             } else {
-                System.err.println("No se pudo encontrar el recurso: " + path);
+                System.err.println("couldn't find resource: " + path);
                 return createPlaceholderIcon(32); // Tamaño por defecto para placeholder
             }
         } catch (Exception e) {
-            System.err.println("Error al cargar icono: " + path + " - " + e.getMessage());
+            System.err.println("Error when loading icon: " + path + " - " + e.getMessage());
             return createPlaceholderIcon(32);
         }
     }
@@ -216,14 +221,12 @@ public class Stats_plays_Window extends JFrame implements ActionListener {
         if (e.getSource() == btnGoB) {
             // Verificar que cont y player no sean null
              if (this.cont == null || this.player == null) {
-                  System.err.println("Error: Intentando volver al menú sin controlador o jugador.");
+                  System.err.println("Error: Triyin to go back to the main menu without the User or controler.");
                   // Quizás cerrar la ventana o mostrar error
                   this.dispose();
                   return;
              }
-            // Crear y mostrar la ventana del menú principal
-            Menu_Window menu = new Menu_Window(this.cont, this.player);
-            menu.setVisible(true);
+           
             // Cerrar esta ventana de estadísticas
             this.dispose();
         }

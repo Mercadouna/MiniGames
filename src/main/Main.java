@@ -1,6 +1,6 @@
 package main;
 
-import controlador.LoginControler;
+import controler.LoginControler;
 import view.Login_Window;
 
 public class Main {

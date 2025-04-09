@@ -4,36 +4,37 @@ import java.awt.EventQueue;
 import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import controlador.LoginControler;
 import model.Player;
-
 import javax.swing.JTextField;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane; // Importar para mensajes de éxito
 import javax.swing.JPasswordField;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import javax.swing.JButton;
 import java.awt.Color;
 import java.awt.RenderingHints;
 import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
+
+import controler.LoginControler;
+
 import java.awt.Cursor;
 
 public class Register_Window extends JFrame implements ActionListener {
 
     private JPanel contentPane;
     private JPasswordField pwfpasswrd;
-    JButton btnSingUp = new JButton("Sign Up");
-    JButton btnBack = new JButton("Back"); // Botón para volver al login
+    private JButton btnSingUp = new JButton("Sign Up");
+    private JButton btnBack = new JButton("Back");
     private LoginControler cont;
     private JTextField textField;
+    private JLabel lblErrorMessage; // Variable de instancia
 
     /**
      * Create the frame.
@@ -42,29 +43,35 @@ public class Register_Window extends JFrame implements ActionListener {
         this.cont = controler;
         setTitle("Register");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setBounds(100, 100, 400, 600); // Ajustar tamaño para que coincida con Login_Window
+        setBounds(100, 100, 400, 600);
         setResizable(false);
+
+        // --- Panel Principal ---
         contentPane = new JPanel() {
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
-                Graphics2D g2d = (Graphics2D) g;
+                Graphics2D g2d = (Graphics2D) g.create();
                 g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
                 GradientPaint gp = new GradientPaint(0, 0, new Color(128, 0, 128), 0, getHeight(), new Color(200, 100, 200));
                 g2d.setPaint(gp);
                 g2d.fillRect(0, 0, getWidth(), getHeight());
+                g2d.dispose();
             }
         };
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+        contentPane.setLayout(null); // Mantener null layout
         setContentPane(contentPane);
-        contentPane.setLayout(null);
 
+        // --- Panel de Registro Interno ---
         JPanel registerPanel = new JPanel();
-        registerPanel.setBounds(50, 100, 300, 400); // Ajustar posición y tamaño
-        registerPanel.setBackground(new Color(255, 255, 255, 200));
-        registerPanel.setLayout(null);
-        contentPane.add(registerPanel);
+        registerPanel.setBounds(50, 100, 300, 400);
+        registerPanel.setBackground(new Color(255, 255, 255, 200)); // Fondo semi-transparente
+        registerPanel.setLayout(null); // Layout nulo
+        // registerPanel.setOpaque(true); // Es true por defecto, pero puedes forzarlo si sospechas
+        contentPane.add(registerPanel); // Añadir al panel principal
 
+        // --- Componentes dentro de registerPanel ---
         JLabel lblUsername = new JLabel("Username");
         lblUsername.setFont(new Font("Arial", Font.BOLD, 14));
         lblUsername.setBounds(30, 50, 80, 20);
@@ -84,7 +91,7 @@ public class Register_Window extends JFrame implements ActionListener {
         pwfpasswrd.setBounds(30, 160, 240, 30);
         registerPanel.add(pwfpasswrd);
 
-        // Estilos para los botones
+        // Estilos Botones
         btnSingUp.setBackground(new Color(128, 0, 128));
         btnSingUp.setForeground(Color.WHITE);
         btnSingUp.setFont(new Font("Arial", Font.BOLD, 16));
@@ -92,7 +99,7 @@ public class Register_Window extends JFrame implements ActionListener {
         btnSingUp.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         btnSingUp.setBorder(new LineBorder(new Color(100, 0, 100), 2));
         registerPanel.add(btnSingUp);
-        
+
         btnBack.setBackground(new Color(128, 0, 128));
         btnBack.setForeground(Color.WHITE);
         btnBack.setFont(new Font("Arial", Font.BOLD, 16));
@@ -101,27 +108,72 @@ public class Register_Window extends JFrame implements ActionListener {
         btnBack.setBorder(new LineBorder(new Color(100, 0, 100), 2));
         registerPanel.add(btnBack);
 
+        // --- Etiqueta de Mensaje de Error (Inicializada y Añadida con más altura) ---
+        lblErrorMessage = new JLabel("");
+        lblErrorMessage.setForeground(Color.RED);
+        lblErrorMessage.setFont(new Font("Arial", Font.BOLD, 11));
+        lblErrorMessage.setHorizontalAlignment(SwingConstants.CENTER);
+        // <<< --- ALTURA AUMENTADA --- >>>
+        lblErrorMessage.setBounds(30, 330, 240, 40); // Aumentada la altura a 40
+        registerPanel.add(lblErrorMessage);
+
+        // Añadir Listeners
         btnSingUp.addActionListener(this);
-        btnBack.addActionListener(this); // Agregar listener para el botón "Back"
+        btnBack.addActionListener(this);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        boolean existe;
+        // Limpiar mensaje de error previo
+        lblErrorMessage.setText("");
+
         if (e.getSource() == btnSingUp) {
-            existe = cont.checkPL(new Player(textField.getText(), new String(pwfpasswrd.getPassword()), 0));
-            if (!existe) {
-                cont.addplayer(new Player(textField.getText(), new String(pwfpasswrd.getPassword()), 0));
-                int playerPoints = cont.obtpoints(new Player(textField.getText(), new String(pwfpasswrd.getPassword()), 0));
-                Menu_Window mw = new Menu_Window(cont, new Player(textField.getText(), new String(pwfpasswrd.getPassword()), playerPoints));
+            // 1. Obtener datos y limpiar espacios
+            String username = textField.getText().trim();
+            String password = new String(pwfpasswrd.getPassword());
+
+            // 2. Realizar Validaciones
+            boolean usernameVacio = username.isEmpty();
+            boolean passwordCorta = password.length() < 3;
+
+            // Ajustar mensajes y lógica de validación si es necesario
+            if (usernameVacio && passwordCorta) {
+                lblErrorMessage.setText("<html><center>Username blank and password<br>too short (min. 3).</center></html>"); // Ejemplo HTML
+                return;
+            } else if (usernameVacio) {
+                lblErrorMessage.setText("The username must contain a name.");
+                return;
+            } else if (passwordCorta) {
+                lblErrorMessage.setText("<html>the password must contain<br>at least 3 characters.</html>");
+                return;
+            }
+
+            // 3. Comprobar existencia si validaciones pasan
+            Player playerParaComprobar = new Player(username, "", 0);
+            boolean existe = cont.checkPL(playerParaComprobar);
+
+            if (existe) {
+                lblErrorMessage.setText("The username '" + username + "' already exists.");
+            } else {
+                // 4. Registrar usuario
+                Player nuevoJugador = new Player(username, password, 0);
+                cont.addplayer(nuevoJugador);
+
+                // Obtener puntos iniciales
+                int playerPoints = cont.obtpoints(nuevoJugador);
+                nuevoJugador.setPoints(playerPoints);
+
+                JOptionPane.showMessageDialog(this,
+                                             "Player '" + username + "' succesfuly created!",
+                                             "Registerin complete",
+                                             JOptionPane.INFORMATION_MESSAGE);
+
+                Menu_Window mw = new Menu_Window(cont, nuevoJugador);
                 mw.setVisible(true);
                 this.dispose();
-            } else {
-                // Manejar usuario existente
             }
-        }
-        
-        if (e.getSource() == btnBack) {
+
+        } else if (e.getSource() == btnBack) {
             Login_Window lw = new Login_Window(cont);
             lw.setVisible(true);
             this.dispose();

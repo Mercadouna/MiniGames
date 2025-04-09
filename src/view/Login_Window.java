@@ -9,7 +9,6 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import controlador.LoginControler;
 import model.Player;
 
 import javax.swing.JTextField;
@@ -24,6 +23,9 @@ import java.awt.Color;
 import java.awt.RenderingHints;
 import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
+
+import controler.LoginControler;
+
 import java.awt.Cursor;
 
 public class Login_Window extends JFrame implements ActionListener {
@@ -127,7 +129,7 @@ public class Login_Window extends JFrame implements ActionListener {
                 mw.setVisible(true);
                 this.dispose();
             } else {
-                lblErrorMessage.setText("Incorrect player or password"); // Mostrar mensaje de error
+                lblErrorMessage.setText("Incorrect username or password"); // Mostrar mensaje de error
             }
         }
 

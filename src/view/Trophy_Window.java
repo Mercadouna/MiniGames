@@ -33,7 +33,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
-import controlador.LoginControler;
+import controler.LoginControler;
 import model.InsufficientPointsException;
 import model.Player;
 // --- Fin Importaciones ---
@@ -89,6 +89,7 @@ public class Trophy_Window extends JDialog implements ActionListener {
 
     // --- Constructor ---
     public Trophy_Window(Player player, LoginControler loginControler) {
+    	setModal(true);
         this.player = player;
         this.loginControler = loginControler;
         setTitle("Sala de Trofeos - " + player.getName());
@@ -97,11 +98,11 @@ public class Trophy_Window extends JDialog implements ActionListener {
         setPreferredSize(new Dimension(850, 650));
 
         // --- Inicializar datos de trofeos (sin cambios) ---
-        trophyList.add(new TrophyUIData("STARTING TROPHYE", 100, "/images/trophy.png"));
-        trophyList.add(new TrophyUIData("RARE TROPHYE", 300, "/images/aim.png"));
-        trophyList.add(new TrophyUIData("EPIC TROPHYE", 800, "/images/math.png"));
-        trophyList.add(new TrophyUIData("MITHYC TROPHYE", 1600, "/images/record.png"));
-        trophyList.add(new TrophyUIData("LEGENDARY TROPHY", 5000, "/images/user.png"));
+        trophyList.add(new TrophyUIData("STARTING TROPHY", 100, "/images/Premio de compensacion.png"));
+        trophyList.add(new TrophyUIData("RARE TROPHY", 300, "/images/silver medal.png"));
+        trophyList.add(new TrophyUIData("EPIC TROPHY", 800, "/images/Gold trophy.png"));
+        trophyList.add(new TrophyUIData("MITHYC TROPHY", 1600, "/images/Mithyc trophy.png"));
+        trophyList.add(new TrophyUIData("LEGENDARY TROPHY", 5000, "/images/LegendaryTrophy.png"));
 
         // --- Panel Principal (sin cambios) ---
         contentPane = new JPanel(new BorderLayout(20, 20)) {
@@ -121,12 +122,12 @@ public class Trophy_Window extends JDialog implements ActionListener {
         // --- Panel Superior (sin cambios) ---
         JPanel topPanel = new JPanel(new BorderLayout(10, 0));
         topPanel.setOpaque(false);
-        JLabel lblTitle = new JLabel("SALA DE TROFEOS");
+        JLabel lblTitle = new JLabel("TROPHY ROOM");
         lblTitle.setFont(titleFont);
         lblTitle.setForeground(textColor);
         lblTitle.setHorizontalAlignment(SwingConstants.CENTER);
         topPanel.add(lblTitle, BorderLayout.CENTER);
-        lblPlayerPoints = new JLabel("Puntos: " + player.getPoints());
+        lblPlayerPoints = new JLabel("Points: " + player.getPoints());
         lblPlayerPoints.setFont(pointsFont);
         lblPlayerPoints.setForeground(textColor);
         lblPlayerPoints.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -147,7 +148,7 @@ public class Trophy_Window extends JDialog implements ActionListener {
         // --- Panel Inferior (sin cambios) ---
         JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         bottomPanel.setOpaque(false);
-        JButton btnMenu = createStyledButton("Volver al Menú");
+        JButton btnMenu = createStyledButton("Go back to menu");
         btnMenu.setActionCommand("MENU");
         btnMenu.addActionListener(this);
         bottomPanel.add(btnMenu);
@@ -185,7 +186,7 @@ public class Trophy_Window extends JDialog implements ActionListener {
         card.add(data.lblName);
 
         // Precio
-        data.lblPrice = new JLabel(data.price + " Puntos");
+        data.lblPrice = new JLabel(data.price + " Points");
         data.lblPrice.setFont(trophyInfoFont);
         data.lblPrice.setForeground(lightPurple); // Color diferente para precio
         data.lblPrice.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -200,7 +201,7 @@ public class Trophy_Window extends JDialog implements ActionListener {
         card.add(Box.createVerticalStrut(10)); // Espacio antes del botón
 
         // Botón Comprar
-        data.btnBuy = createStyledButton("Comprar");
+        data.btnBuy = createStyledButton("Buy");
         data.btnBuy.setActionCommand(data.name); // Usar nombre como comando
         data.btnBuy.addActionListener(this);
         data.btnBuy.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -241,11 +242,11 @@ public class Trophy_Window extends JDialog implements ActionListener {
             if (imgURL != null) {
                 return new ImageIcon(imgURL);
             } else {
-                System.err.println("No se pudo encontrar el recurso: " + path);
+                System.err.println("Could not find resource: " + path);
                 return createPlaceholderIcon(size);
             }
         } catch (Exception e) {
-            System.err.println("Error al cargar icono: " + path + " - " + e.getMessage());
+            System.err.println("Error when loading Icon: " + path + " - " + e.getMessage());
             return createPlaceholderIcon(size);
         }
     }
@@ -268,7 +269,7 @@ public class Trophy_Window extends JDialog implements ActionListener {
         try {
             boughtTrophies = loginControler.getBoughtTrophies(player);
         } catch (Exception e) {
-            System.err.println("Error al cargar trofeos comprados: " + e.getMessage());
+            System.err.println("Error when loading unlocked trophies: " + e.getMessage());
             boughtTrophies = new ArrayList<>();
         }
 
@@ -278,16 +279,16 @@ public class Trophy_Window extends JDialog implements ActionListener {
 
             if (isBought) {
                 data.lblImage.setIcon(loadIcon(data.imagePath, 90));
-                data.lblStatus.setText("Desbloqueado");
+                data.lblStatus.setText("Unlocked");
                 data.lblStatus.setForeground(successColor);
                 data.btnBuy.setEnabled(false);
-                data.btnBuy.setText("Comprado");
+                data.btnBuy.setText("Bought");
                 data.lblPrice.setVisible(false);
             } else {
                 data.lblImage.setIcon(loadIcon(data.questionImagePath, 90));
                 data.lblStatus.setText(" ");
                 data.btnBuy.setEnabled(true);
-                data.btnBuy.setText("Comprar");
+                data.btnBuy.setText("Bought");
                 data.lblPrice.setVisible(true);
             }
         } // --- Fin del bucle for ---
@@ -315,8 +316,6 @@ public class Trophy_Window extends JDialog implements ActionListener {
         String command = e.getActionCommand();
 
         if ("MENU".equals(command)) {
-            Menu_Window mw = new Menu_Window(this.loginControler, this.player);
-            mw.setVisible(true);
             this.dispose();
         } else {
             TrophyUIData targetTrophy = null;
@@ -329,7 +328,7 @@ public class Trophy_Window extends JDialog implements ActionListener {
             if (targetTrophy != null) {
                 handleBuyAttempt(targetTrophy);
             } else {
-                 System.err.println("Comando de acción desconocido: " + command);
+                 System.err.println("Unknown action command: " + command);
             }
         }
     }
@@ -337,8 +336,8 @@ public class Trophy_Window extends JDialog implements ActionListener {
     // --- Método handleBuyAttempt (sin cambios) ---
     private void handleBuyAttempt(TrophyUIData trophyData) {
         int confirmation = JOptionPane.showConfirmDialog(this,
-                "¿Deseas comprar '" + trophyData.name + "' por " + trophyData.price + " puntos?",
-                "Confirmar Compra",
+                "Buy '" + trophyData.name + "' for " + trophyData.price + " points?",
+                "Confirm purchase",
                 JOptionPane.YES_NO_OPTION,
                 JOptionPane.QUESTION_MESSAGE);
 
@@ -351,23 +350,23 @@ public class Trophy_Window extends JDialog implements ActionListener {
                     // Ya no llamamos a updatePointsDisplay() aquí, loadTrophiesStatus lo hará
                     loadTrophiesStatus(); // Recargar TODO el estado visual
                     JOptionPane.showMessageDialog(this,
-                            "¡Has comprado '" + trophyData.name + "'!",
-                            "Compra Exitosa", JOptionPane.INFORMATION_MESSAGE);
+                            "You bought '" + trophyData.name + "'!",
+                            "Successful purchase", JOptionPane.INFORMATION_MESSAGE);
                 } else {
                     loadTrophiesStatus(); // Recargar por si acaso (ej: ya lo tenía)
                     JOptionPane.showMessageDialog(this,
-                            "No se pudo completar la compra.\n(Es posible que ya tuvieras el trofeo).",
-                            "Compra Fallida", JOptionPane.WARNING_MESSAGE);
+                            "purchase failed.\n(probably you already had this trophy).",
+                            "purchase failed", JOptionPane.WARNING_MESSAGE);
                 }
             } catch (InsufficientPointsException ipe) {
                 JOptionPane.showMessageDialog(this,
                         ipe.getMessage(),
-                        "Puntos Insuficientes", JOptionPane.WARNING_MESSAGE);
+                        "Insufficient points", JOptionPane.WARNING_MESSAGE);
             } catch (Exception ex) {
-                System.err.println("Error inesperado durante la compra: " + ex.getMessage());
+                System.err.println("Unexpected error during purchase: " + ex.getMessage());
                 ex.printStackTrace();
                 JOptionPane.showMessageDialog(this,
-                        "Ocurrió un error inesperado al intentar comprar.\nRevisa la consola para más detalles.",
+                        "Unexpected error during purchase.\nLook at he console for more info.",
                         "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
