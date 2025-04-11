@@ -66,26 +66,26 @@ public class LoginControler {
 	            return; // No intentar guardar si falta información esencial
 	        }
 	        if (dao == null) {
-	             System.err.println("Error crítico en savePlayResult: El objeto DAO no está inicializado.");
+	             System.err.println("Critical error in savePlayResult: The DAO object is not initialized.");
 	             return; // No se puede continuar sin DAO
 	        }
 
 	        try {
 	            // Llama al método correspondiente en la instancia del DAO (dao)
 	            // Este método dao.recordPlay es el que debe estar corregido (manejo de ID y conexión)
-	            System.out.println("Controlador: Llamando a dao.recordPlay para Jugador ID (obtenido en DAO): "
-	                               + player.getName() + ", Juego: " + gameName + ", Score: " + score); // Mensaje Debug
+	            System.out.println("Controller: Calling dao.recordPlay for Player ID (obtained in DAO): "
+	                               + player.getName() + ", Game: " + gameName + ", Score: " + score); // Mensaje Debug
 	            dao.recordPlay(player, gameName, score);
 
 	        } catch (SQLException e) {
 
-	            System.err.println("Error de Controlador al intentar guardar resultado de partida para "
+	            System.err.println("Controller error when trying to save game result for "
 	                               + player.getName() + ". SQLException: " + e.getMessage());
 	
 
 	        } catch (Exception ex) {
 	            // Capturar cualquier otra excepción inesperada para que no detenga la aplicación
-	             System.err.println("Error inesperado en savePlayResult para " + player.getName() + ": " + ex.getMessage());
+	             System.err.println("Unexpected error in savePlayResult for " + player.getName() + ": " + ex.getMessage());
 	             ex.printStackTrace(); // Imprimir traza completa para errores inesperados
 	        }
 	    }

@@ -102,7 +102,7 @@ public  class DBImplementation implements PlayerDAO{
 			stmt.close();
 			con.close();
 		} catch (SQLException e) {
-			System.out.println("Error al eliminar al jugador: " + e.getMessage());
+			System.out.println("Error when eliminating the player: " + e.getMessage());
 			e.printStackTrace();
 		}
 
@@ -140,7 +140,7 @@ public  class DBImplementation implements PlayerDAO{
 	         tempStmt.executeUpdate();
 
 	     } catch (SQLException e) {
-	         System.err.println("Error SQL en modifypoints: " + e.getMessage());
+	         System.err.println("SQL error in modifypoints:" + e.getMessage());
 	         e.printStackTrace(); // O manejar de otra forma
 	     }
 	     // Eliminar this.openConnection() y los close() manuales de aquí
@@ -165,7 +165,7 @@ public  class DBImplementation implements PlayerDAO{
 		try {
 			con = DriverManager.getConnection(urlBD, this.userBD, this.passwordBD);
 		} catch (SQLException e) {
-			System.out.println("Error al intentar abrir la BD");
+			System.out.println("Error when trying to open the DB");
 			e.printStackTrace();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -305,7 +305,7 @@ public  class DBImplementation implements PlayerDAO{
 			stmt.close();
 			con.close();
 		} catch (SQLException e) {
-			System.out.println("Error al verificar credenciales: " + e.getMessage());
+			System.out.println("Error verifying credentials:" + e.getMessage());
 		}
 		return plays;
 	}
