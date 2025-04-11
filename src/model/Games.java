@@ -1,22 +1,22 @@
 package model;
 
 public class Games {
-	private String nombre;
+	private String name;
 
 	public Games() {
-		this.nombre="";
+		this.name="";
 	}
-	public Games(String nom) {
-		this.nombre=nom;
+	public Games(String nam) {
+		this.name=nam;
 	}
-	public String getNombre() {
-		return nombre;
+	public String getName() {
+		return name;
 	}
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
+	public void setName(String name) {
+		this.name = name;
 	}
 	@Override
 	public String toString() {
-		return "Trophy [nombre=" + nombre + "]";
+		return "Trophy [nombre=" + name + "]";
 	}
 }

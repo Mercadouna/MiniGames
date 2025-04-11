@@ -331,23 +331,23 @@ public  class DBImplementation implements PlayerDAO{
 	                playerId = idRs.getInt("Us_Id"); // Obtiene el INT directamente
 	            } else {
 	                // Lanzar excepción si no podemos encontrar el ID por nombre
-	                throw new SQLException("recordPlay: No se pudo encontrar el ID del jugador para el nombre: " + player.getName());
+	                throw new SQLException("recordPlay: Player ID could not be found for the name: " + player.getName());
 	            }
 	        } // idRs se cierra solo
 	    } catch (SQLException e) {
 	        // Log and re-throw or handle more gracefully
-	        System.err.println("recordPlay: Error SQL al obtener ID para " + player.getName() + ": " + e.getMessage());
+	        System.err.println("recordPlay: SQL error when getting ID for " + player.getName() + ": " + e.getMessage());
 	        throw e; // Re-throw para notificar al controlador
 	    } // idStmt y idCon se cierran automáticamente
 	    // --- Fin obtención ID ---
 
 	    if (playerId <= 0) { // Comprobación extra por si acaso
-	        throw new SQLException("recordPlay: ID de jugador inválido obtenido: " + playerId);
+	        throw new SQLException("recordPlay: Invalid player ID obtained: " + playerId);
 	    }
 
 	    // --- Ahora, ejecutar el INSERT con el ID correcto ---
 	    String sql = SAVEPLAYS; // "INSERT INTO PLAYS(Us_ID, G_Name, DATI, SCORE) VALUES (?, ?, CURDATE(), ?)";
-	    System.out.println("Guardando partida: Jugador ID=" + playerId + ", Juego=" + gname + ", Score=" + score); // Debug
+	    System.out.println("Saving game: Player ID=" + playerId + ", Game=" + gname + ", Score=" + score); // Debug
 
 	    // Usar Try-with-Resources para la conexión y el statement del INSERT
 	    try (Connection tempCon = DriverManager.getConnection(urlBD, userBD, passwordBD);
@@ -358,10 +358,10 @@ public  class DBImplementation implements PlayerDAO{
 	        tempStmt.setInt(3, score);
 	        tempStmt.executeUpdate();
 
-	        System.out.println("Partida guardada exitosamente."); // Debug Éxito
+	        System.out.println("Game successfully saved."); // Debug Éxito
 
 	    } catch (SQLException e) {
-	        System.err.println("Error SQL al guardar partida para player ID " + playerId + ": " + e.getMessage());
+	        System.err.println("SQL error when saving game for player ID " + playerId + ": " + e.getMessage());
 	        // Relanzar la excepción
 	        throw e;
 	    } // Recursos se cierran automáticamente
@@ -421,8 +421,8 @@ public  class DBImplementation implements PlayerDAO{
 			// 4. Comprobar si tiene puntos suficientes
 			if (currentPoints < trophyPrice) {
 				// No tiene suficientes puntos, lanzar excepción personalizada
-				throw new InsufficientPointsException("Puntos insuficientes para comprar " + trophyName +
-						". Necesarios: " + trophyPrice + ", Tienes: " + currentPoints);
+				throw new InsufficientPointsException("Insufficient points to purchase" + trophyName +
+						". Necessary: " + trophyPrice + ", You have: " + currentPoints);
 			}
 
 			// 5. Actualizar puntos del jugador
@@ -441,11 +441,11 @@ public  class DBImplementation implements PlayerDAO{
 			if (rowsAffectedPlayer > 0 && rowsAffectedBuy > 0) {
 				localCon.commit();
 				purchaseSuccessful = true;
-				System.out.println("Compra exitosa: Jugador " + playerId + ", Trofeo " + trophyName);
+				System.out.println("Successful purchase: Player" + playerId + ", Trophy " + trophyName);
 			} else {
 				// Si algo falló (inesperado si no hubo excepciones), deshacer
 				localCon.rollback();
-				System.err.println("Error en la transacción de compra, rollback ejecutado.");
+				System.err.println("Error in purchase transaction, rollback executed.");
 				throw new SQLException("Database update failed during trophy purchase, transaction rolled back.");
 			}
 
@@ -453,10 +453,10 @@ public  class DBImplementation implements PlayerDAO{
 			// Si ocurre cualquier error SQL o de puntos insuficientes, deshacer transacción
 			if (localCon != null) {
 				try {
-					System.err.println("Error durante la compra (" + e.getMessage() + "), ejecutando rollback...");
+					System.err.println("Error during purchase (" + e.getMessage() + "), executing rollback...");
 					localCon.rollback();
 				} catch (SQLException rollbackEx) {
-					System.err.println("Error ejecutando rollback: " + rollbackEx.getMessage());
+					System.err.println("Error executing rollback:" + rollbackEx.getMessage());
 				}
 			}
 			// Relanzar la excepción para que la capa superior la maneje
@@ -475,7 +475,7 @@ public  class DBImplementation implements PlayerDAO{
 					localCon.setAutoCommit(true); // Restaurar modo auto-commit
 					localCon.close(); // Cerrar conexión
 				} catch (SQLException e) {
-					System.err.println("Error al cerrar conexión/restaurar auto-commit: " + e.getMessage());
+					System.err.println("Error when closing connection/restarting auto-commit: " + e.getMessage());
 				}
 			}
 			// ¡OJO! Si usas un Pool de Conexiones, el cierre (localCon.close())
@@ -503,7 +503,7 @@ public  class DBImplementation implements PlayerDAO{
 			stm.close();
 			con.close();
 		} catch (SQLException e) {
-			System.err.println("Error al obtener los trofeos comprados: " + e.getMessage());
+			System.err.println("Error when obtaining purchased trophies: " + e.getMessage());
 			e.printStackTrace();
 		}
 		return trophies;
